@@ -22,7 +22,7 @@ Most applicant tracking systems match keywords or hand out shallow scores. A hir
 
 ## What I designed
 
-The platform evaluates and ranks candidates from several kinds of input at once: CV analysis, video assessments and interactive chat-based interviews.
+The platform evaluates and ranks candidates from several kinds of input at once: CV analysis, video assessments and interactive chat-based interviews. I also designed its PostgreSQL schema and Alembic migrations.
 
 The paper describes the framework behind it:
 

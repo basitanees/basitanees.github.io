@@ -2,9 +2,16 @@ export const ASK = [
   {
     id: 'agents',
     question: 'What do you build with agents?',
-    answer: "I developed Koder, aiXplain's coding agent, and implemented the framework aiXplain's agents run on, built on LangChain and LangGraph.",
+    answer: "A voice customer-service agent that answers from a client's data and keeps getting better from its own evals. I also developed Koder, aiXplain's coding agent.",
     href: '/areas/ai-agents/',
     linkLabel: 'See the agents work',
+  },
+  {
+    id: 'evals',
+    question: 'How do you evaluate agents?',
+    answer: 'Live customer logs become new test cases, and each one runs several times. Prompt optimization runs within a set LLM budget until the tests pass, and a held-out set checks the result so the agent does not overfit.',
+    href: '/work/voice-agent/',
+    linkLabel: 'Read about the voice agent',
   },
   {
     id: 'research',

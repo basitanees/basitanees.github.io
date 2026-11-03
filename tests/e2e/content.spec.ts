@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test('work lists every work entry', async ({ page }) => {
   await page.goto('/work/');
-  await expect(page.locator('[data-project]')).toHaveCount(10);
+  await expect(page.locator('[data-project]')).toHaveCount(11);
 });
 
 test('research lists every research entry plus the EACL work', async ({ page }) => {
@@ -28,4 +28,23 @@ test('the CLIPInverter demo links the Hugging Face space from the sources', asyn
 test('the Koder card links the product page', async ({ page }) => {
   await page.goto('/work/');
   await expect(page.locator('[data-project="koder"]').getByRole('link', { name: /Product page/ })).toHaveAttribute('href', 'https://www.aixplain.com/koder');
+});
+
+test('the voice agent has its own page', async ({ page }) => {
+  await page.goto('/work/voice-agent/');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Voice customer-service agent');
+});
+
+test('the home page features the voice agent and asks about evals', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('.more [data-project="voice-agent"]')).toBeVisible();
+  await page.locator('label[for="view-ask"]').click();
+  const ask = page.locator('[data-view="ask"]');
+  await ask.getByText('How do you evaluate agents?').click();
+  await expect(ask.getByRole('link', { name: /voice agent/i })).toHaveAttribute('href', '/work/voice-agent/');
+});
+
+test('the CV lists the voice agent', async ({ page }) => {
+  await page.goto('/cv/');
+  await expect(page.getByText(/voice customer-service agent/i).first()).toBeVisible();
 });

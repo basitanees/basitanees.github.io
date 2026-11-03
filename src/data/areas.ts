@@ -11,7 +11,7 @@ export type AreaId = (typeof AREA_IDS)[number];
 
 export const AREAS: { id: AreaId; label: string; caption: string }[] = [
   { id: 'retrieval-search', label: 'Retrieval & search', caption: 'vector + hybrid search · re-ranking · evaluation' },
-  { id: 'ai-agents', label: 'AI agents', caption: 'coding agent · agent memory · tools' },
+  { id: 'ai-agents', label: 'AI agents', caption: 'voice agents · coding agent · tools' },
   { id: 'knowledge-graphs', label: 'Knowledge graphs', caption: 'Neo4j · graph modelling · Cypher' },
   { id: 'generative-models', label: 'Generative models', caption: 'StyleGAN · CLIP · text-driven image editing' },
   { id: 'llm-systems', label: 'LLM systems', caption: 'structured output · eval harnesses · text-to-SQL' },

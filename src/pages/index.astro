@@ -8,7 +8,7 @@ import { sortProjects } from '../lib/projects';
 
 const all = await getCollection('projects');
 const pick = (ids: string[]) => sortProjects(all.filter((p) => ids.includes(p.id)));
-const work = pick(['air-retrieval-service', 'candidate-assessment', 'koder', 'knowledge-graphs']);
+const work = pick(['air-retrieval-service', 'voice-agent', 'candidate-assessment', 'koder']);
 const research = pick(['hypergan-clip', 'clipinverter']);
 ---
 <Base title={SITE.name} description={`${SITE.headline}. Projects, research and CV.`} current="home">

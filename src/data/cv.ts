@@ -27,7 +27,8 @@ export const CV = {
         'Set the evaluation method for every retrieval change: each candidate is benchmarked against production on recall, latency and cost before adoption. TurboQuant compression (Google), context-aware embeddings (Perplexity) and decision-model re-ranking all shipped this way.',
         'Re-architected storage around a multi-tenant design, lifting the old cap on the number of indexes, so empty indexes cost nothing; TurboQuant compression cut memory with no measurable accuracy loss. Own CI/CD for aiR, Koder and the aiXplain SDK, Kubernetes (AWS EKS) deployment, Datadog tracing across services, and backup and capacity planning for production collections.',
         "Led IndexFactory, aiR's SDK layer, which put different vector and graph-search backends behind one interface; active contributor to the aiXplain SDK and backend.",
-        'Designed an LLM-driven candidate-assessment platform that evaluates and ranks candidates from multimodal data (CV analysis, video assessments and interactive chat-based interviews), with an active listwise tournament that needs far fewer comparisons; published at EACL 2026.',
+        "Built an end-to-end voice customer-service agent for a client that answers from the client's customer data through SQL queries, with an eval harness that finds failures and keeps improving the agent: live customer logs are continuously evaluated to add new test cases on the fly, each run with multiple repetitions, and a user-chosen LLM budget drives prompt optimization until the test cases pass, checked against a held-out set to avoid overfitting. The agent now follows its instructions on live calls.",
+        'Designed an LLM-driven candidate-assessment platform that evaluates and ranks candidates from multimodal data (CV analysis, video assessments and interactive chat-based interviews), including its PostgreSQL schema and Alembic migrations, with an active listwise tournament that needs far fewer comparisons; published at EACL 2026.',
         "Implemented aiXplain's AI agents framework on LangChain and LangGraph, and designed agent pipelines with aiXplain, LangGraph and CrewAI.",
         "Built agent memory for aiXplain agents, giving agents structured, versioned knowledge they write and read back across sessions.",
         'Delivered proofs of concept across domains: LLM-powered data analysis and plotting, PDF table extraction pipelines, chatbots and AutoML deployments, and automatic video dubbing and text de-normalization for low-resource languages.',
@@ -158,7 +159,7 @@ export const CV = {
     { group: 'MLOps & cloud', items: 'Docker, Kubernetes, AWS (EKS, S3, ECR), Azure, Flyte, KServe, CI/CD; Datadog, distributed tracing' },
     { group: 'Backend & data', items: 'FastAPI, Django, asyncio, REST APIs; PostgreSQL, MongoDB, Redis, Alembic; behaviour-driven development; RFC-driven development' },
     { group: 'Knowledge engineering', items: 'LLM entity & relation extraction; metadata & schema design; provenance; agent memory' },
-    { group: 'LLM systems', items: 'structured output & validation; retries & fallbacks; eval harnesses; text-to-SQL; token & cost tracking' },
+    { group: 'LLM systems', items: 'structured output & validation; retries & fallbacks; eval harnesses; eval-driven prompt optimization with held-out sets; voice agents; text-to-SQL; token & cost tracking' },
   ],
   languages: ['English (professional)', 'Urdu (native)', 'Turkish (basic)'],
   achievements: [
