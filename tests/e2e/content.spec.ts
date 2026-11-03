@@ -53,3 +53,12 @@ test('the agents framework card describes the work', async ({ page }) => {
   await page.goto('/work/');
   await expect(page.locator('[data-project="agents-framework"]')).toContainText("I worked on aiXplain's AI agents framework");
 });
+
+test('the HR manager page covers the interviews and their analysis', async ({ page }) => {
+  await page.goto('/work/candidate-assessment/');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('HR manager');
+  const main = page.getByRole('main');
+  await expect(main).toContainText('AI avatar');
+  await expect(main).toContainText('emotion analysis');
+  await expect(main).toContainText('transcript analysis');
+});

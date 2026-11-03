@@ -16,7 +16,7 @@ export const ASK = [
   {
     id: 'research',
     question: 'Show me your research',
-    answer: 'Text-driven image editing with StyleGAN and CLIP, published at SIGGRAPH Asia and in ACM Transactions on Graphics. More recently, LLM-driven candidate assessment at EACL 2026.',
+    answer: 'Text-driven image editing with StyleGAN and CLIP, published at SIGGRAPH Asia and in ACM Transactions on Graphics. More recently, LLM-driven candidate assessment at EACL 2026, the ranking method behind aiXplain\'s HR manager.',
     href: '/research/',
     linkLabel: 'Open research',
   },
