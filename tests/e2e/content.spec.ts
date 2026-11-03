@@ -48,3 +48,8 @@ test('the CV lists the voice agent', async ({ page }) => {
   await page.goto('/cv/');
   await expect(page.getByText(/voice customer-service agent/i).first()).toBeVisible();
 });
+
+test('the agents framework card describes the work', async ({ page }) => {
+  await page.goto('/work/');
+  await expect(page.locator('[data-project="agents-framework"]')).toContainText("I worked on aiXplain's AI agents framework");
+});
