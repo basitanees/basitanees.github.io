@@ -1,0 +1,57 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../data/site';
+
+const links = [
+  { label: 'Email', text: SITE.email, href: `mailto:${SITE.email}` },
+  { label: 'LinkedIn', text: 'linkedin.com/in/abdul-basit-anees', href: SITE.linkedin },
+  { label: 'GitHub', text: 'github.com/basitanees', href: SITE.github },
+  { label: 'Google Scholar', text: 'Papers and citations', href: SITE.scholar },
+  { label: 'CV', text: 'Download the PDF', href: SITE.pdfPath },
+];
+---
+<Base title="Contact" description="How to reach Abdul Basit Anees: email, LinkedIn, GitHub and Google Scholar." current="contact">
+  <section class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">Contact</p>
+      <h1>Get in touch</h1>
+      <p class="muted">Say hello, or have a look at the work first.</p>
+    </header>
+    <ul class="links">
+      {
+        links.map((l) => (
+          <li>
+            <a class="glass" href={l.href}>
+              <strong>{l.label}</strong>
+              <span class="muted">{l.text}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+    gap: 14px;
+    max-width: 860px;
+  }
+  .links a {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 18px 22px;
+    border-radius: var(--radius);
+    color: var(--text);
+  }
+  .links a:hover {
+    text-decoration: none;
+    background: var(--hov);
+  }
+</style>

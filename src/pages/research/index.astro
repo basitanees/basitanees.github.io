@@ -1,0 +1,89 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import AreaChips from '../../components/AreaChips.astro';
+import ProjectGrid from '../../components/ProjectGrid.astro';
+import { AREA_IDS } from '../../data/areas';
+import { PUBLICATIONS } from '../../data/publications';
+import { SITE } from '../../data/site';
+import { inSection, sortProjects } from '../../lib/projects';
+
+const projects = sortProjects(inSection(await getCollection('projects'), 'research'));
+const areas = AREA_IDS.filter((a) => projects.some((p) => p.data.areas.includes(a)));
+---
+<Base title="Research" description="Papers and research projects by Abdul Basit Anees, from text-driven image editing to agentic AI." current="research">
+  <section class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">Research</p>
+      <h1>Papers and projects</h1>
+      <p class="muted">From text-driven image editing at Koç University's KUIS AI Center to agentic AI at aiXplain.</p>
+      <AreaChips areas={areas} />
+    </header>
+
+    <h2 class="section-title">Publications</h2>
+    <ol class="pubs">
+      {
+        PUBLICATIONS.map((p) => (
+          <li class="pub glass">
+            <p class="venue eyebrow">{p.venue}</p>
+            <h3>
+              <a href={p.project}>{p.title}</a>
+            </h3>
+            <p class="authors">
+              {p.authors.map((a, i) => (
+                <>
+                  {i > 0 && ', '}
+                  {a === SITE.name ? <strong>{a}</strong> : a}
+                </>
+              ))}
+            </p>
+            <p class="links">
+              {p.links.map((l) => (
+                <a href={l.href}>{l.label} ↗</a>
+              ))}
+            </p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <h2 class="section-title">Projects</h2>
+    <ProjectGrid projects={projects} />
+  </section>
+</Base>
+
+<style>
+  .pubs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 14px;
+  }
+  .pub {
+    border-radius: var(--radius);
+    padding: 18px 22px;
+  }
+  .pub h3 {
+    margin: 4px 0 6px;
+    font-size: 18px;
+  }
+  .pub h3 a {
+    color: var(--text);
+  }
+  .authors {
+    margin: 0 0 8px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .authors strong {
+    color: var(--text);
+  }
+  .links {
+    margin: 0;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    font-size: 13px;
+  }
+</style>

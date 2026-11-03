@@ -1,0 +1,103 @@
+---
+import { SITE } from '../../data/site';
+import MapView from './MapView.astro';
+import AskView from './AskView.astro';
+import ReelView from './ReelView.astro';
+
+const VIEWS = [
+  { id: 'map', label: 'Map' },
+  { id: 'ask', label: 'Ask' },
+  { id: 'reel', label: 'Reel' },
+];
+---
+<section class="hero wrap">
+  <p class="eyebrow">{SITE.eyebrow}</p>
+  <h1>{SITE.name}</h1>
+  <p class="headline">{SITE.headline}</p>
+  <p class="intro muted">
+    I build the retrieval and agent systems that LLMs read from and act through, and I benchmark every retrieval change before it ships. My research is on
+    generative models, published at SIGGRAPH Asia and in ACM Transactions on Graphics.
+  </p>
+
+  <div class="views">
+    <fieldset class="seg glass">
+      <legend class="sr-only">Choose a view</legend>
+      {
+        VIEWS.map((v, i) => (
+          <>
+            <input class="sr-only" type="radio" name="hero-view" id={`view-${v.id}`} checked={i === 0} />
+            <label for={`view-${v.id}`}>{v.label}</label>
+          </>
+        ))
+      }
+    </fieldset>
+    <div class="panel glass">
+      <div class="view" data-view="map"><MapView /></div>
+      <div class="view" data-view="ask"><AskView /></div>
+      <div class="view" data-view="reel"><ReelView /></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    text-align: center;
+    padding-top: 20px;
+  }
+  h1 {
+    font-size: clamp(36px, 7vw, 56px);
+    margin: 8px 0 6px;
+  }
+  .headline {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 8px;
+  }
+  .intro {
+    max-width: 640px;
+    margin: 0 auto 22px;
+    font-size: 15px;
+  }
+  .seg {
+    display: inline-flex;
+    gap: 2px;
+    padding: 4px;
+    margin: 0 0 16px;
+    border-radius: 999px;
+    font-size: 13px;
+  }
+  .seg label {
+    padding: 6px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .seg input:checked + label {
+    background: var(--seg);
+    font-weight: 600;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  }
+  .seg input:focus-visible + label {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .panel {
+    border-radius: 26px;
+    display: grid;
+    text-align: left;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .view {
+    grid-area: 1 / 1;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.35s, visibility 0.35s;
+  }
+  .views:has(#view-map:checked) [data-view='map'],
+  .views:has(#view-ask:checked) [data-view='ask'],
+  .views:has(#view-reel:checked) [data-view='reel'] {
+    visibility: visible;
+    opacity: 1;
+  }
+</style>

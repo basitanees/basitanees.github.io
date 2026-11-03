@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Hero from '../components/hero/Hero.astro';
+import ProjectGrid from '../components/ProjectGrid.astro';
+import { SITE } from '../data/site';
+import { sortProjects } from '../lib/projects';
+
+const all = await getCollection('projects');
+const pick = (ids: string[]) => sortProjects(all.filter((p) => ids.includes(p.id)));
+const work = pick(['air-retrieval-service', 'candidate-assessment', 'koder', 'knowledge-graphs']);
+const research = pick(['hypergan-clip', 'clipinverter']);
+---
+<Base title={SITE.name} description={`${SITE.headline}. Projects, research and CV.`} current="home">
+  <Hero />
+  <section class="wrap more">
+    <div class="row-head">
+      <h2 class="section-title">Selected work</h2>
+      <a href="/work/">All work →</a>
+    </div>
+    <ProjectGrid projects={work} />
+    <div class="row-head">
+      <h2 class="section-title">Research</h2>
+      <a href="/research/">All research →</a>
+    </div>
+    <ProjectGrid projects={research} />
+  </section>
+</Base>
+
+<style>
+  .more {
+    margin-top: 40px;
+  }
+  .row-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+</style>

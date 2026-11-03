@@ -1,0 +1,57 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+  current?: 'home' | 'work' | 'research' | 'cv' | 'contact';
+}
+const { current } = Astro.props;
+const links = [
+  { id: 'home', label: 'Home', href: '/' },
+  { id: 'work', label: 'Work', href: '/work/' },
+  { id: 'research', label: 'Research', href: '/research/' },
+  { id: 'cv', label: 'CV', href: '/cv/' },
+  { id: 'contact', label: 'Contact', href: '/contact/' },
+];
+---
+<nav class="nav glass" aria-label="Main">
+  {links.map((l) => <a href={l.href} aria-current={l.id === current ? 'page' : undefined}>{l.label}</a>)}
+  <ThemeToggle />
+</nav>
+
+<style>
+  .nav {
+    position: fixed;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 5px 6px;
+    border-radius: 999px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  a {
+    color: var(--text);
+    padding: 6px 13px;
+    border-radius: 999px;
+  }
+  a:hover {
+    text-decoration: none;
+    background: var(--hov);
+  }
+  a[aria-current='page'] {
+    background: var(--seg);
+    font-weight: 600;
+  }
+  @media (max-width: 640px) {
+    .nav {
+      font-size: 12px;
+    }
+    a {
+      padding: 6px 8px;
+    }
+  }
+</style>

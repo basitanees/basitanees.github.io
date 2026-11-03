@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import AreaChips from '../../components/AreaChips.astro';
+import ProjectGrid from '../../components/ProjectGrid.astro';
+import { AREA_IDS } from '../../data/areas';
+import { inSection, sortProjects } from '../../lib/projects';
+
+const projects = sortProjects(inSection(await getCollection('projects'), 'work'));
+const areas = AREA_IDS.filter((a) => projects.some((p) => p.data.areas.includes(a)));
+---
+<Base title="Work" description="Industry work by Abdul Basit Anees: retrieval, agents, knowledge graphs and the infrastructure under them." current="work">
+  <section class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">Work</p>
+      <h1>What I've built</h1>
+      <p class="muted">Most of it is at aiXplain, where I'm a Research Engineer working on retrieval, agents and the infrastructure under them.</p>
+      <AreaChips areas={areas} />
+    </header>
+    <ProjectGrid projects={projects} />
+  </section>
+</Base>

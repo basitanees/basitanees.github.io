@@ -1,0 +1,30 @@
+---
+import { SITE } from '../data/site';
+---
+<footer class="wrap">
+  <p>
+    <a href={`mailto:${SITE.email}`}>Email</a>
+    <a href={SITE.linkedin}>LinkedIn</a>
+    <a href={SITE.github}>GitHub</a>
+    <a href={SITE.scholar}>Google Scholar</a>
+  </p>
+  <p class="muted">© {new Date().getFullYear()} {SITE.name}</p>
+</footer>
+
+<style>
+  footer {
+    position: relative;
+    z-index: 1;
+    padding-top: 48px;
+    padding-bottom: 40px;
+    font-size: 13px;
+    text-align: center;
+  }
+  p {
+    margin: 6px 0;
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+</style>

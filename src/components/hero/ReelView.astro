@@ -1,0 +1,200 @@
+---
+const results = [
+  { w: 120, text: 'Noodle Lab, 6 min walk' },
+  { w: 80, text: 'Broth & Bowl, 11 min' },
+  { w: 30, text: 'a sushi place (nice try)' },
+];
+const tasks = ['read the repo', 'find the bug', 'write the fix', 'run the tests'];
+const labels = ['Search', 'Agents', 'Knowledge graphs', 'Generative models'];
+---
+<div class="reel">
+  <div class="screen glass">
+    <div class="scene s1">
+      <p class="lbl">Search</p>
+      <p class="q">› "best ramen within walking distance?"</p>
+      {results.map((r) => <p class="res"><i style={`width:${r.w}px`}></i>{r.text}</p>)}
+    </div>
+    <div class="scene s2">
+      <p class="lbl">Agents</p>
+      {tasks.map((t) => <p class="task"><b aria-hidden="true">✓</b>{t}</p>)}
+    </div>
+    <div class="scene s3">
+      <p class="lbl">Knowledge graphs</p>
+      <svg class="kg" viewBox="0 0 400 130" role="img" aria-label="A small graph linking Marie Curie, Pierre Curie, the Nobel Prize, Physics and Chemistry">
+        <line x1="70" y1="40" x2="200" y2="65"></line><line x1="200" y1="65" x2="330" y2="35"></line>
+        <line x1="200" y1="65" x2="300" y2="110"></line><line x1="70" y1="40" x2="110" y2="110"></line>
+        <circle cx="70" cy="40" r="16"></circle><circle cx="200" cy="65" r="20"></circle><circle cx="330" cy="35" r="16"></circle>
+        <circle cx="300" cy="110" r="14"></circle><circle cx="110" cy="110" r="14"></circle>
+        <text x="48" y="14">Marie Curie</text><text x="183" y="100">Nobel Prize</text><text x="310" y="12">Physics</text>
+        <text x="318" y="128">Chemistry</text><text x="66" y="128">Pierre Curie</text>
+      </svg>
+    </div>
+    <div class="scene s4">
+      <p class="lbl">Generative models</p>
+      <p class="faces"><span aria-hidden="true">😐</span><span class="arrow">"make it smile"<br />→</span><span aria-hidden="true">😄</span></p>
+    </div>
+  </div>
+  <p class="dots" aria-hidden="true">{labels.map((l, i) => <span class={`dot d${i + 1}`}>{l}</span>)}</p>
+</div>
+
+<style>
+  .reel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 16px 20px;
+  }
+  .screen {
+    width: min(480px, 100%);
+    min-height: 210px;
+    border-radius: 18px;
+    display: grid;
+  }
+  .scene {
+    grid-area: 1 / 1;
+    padding: 18px 22px;
+    opacity: 0;
+    animation: scene 12s ease infinite;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .scene p {
+    margin: 0;
+  }
+  .s2 {
+    animation-delay: 3s;
+  }
+  .s3 {
+    animation-delay: 6s;
+  }
+  .s4 {
+    animation-delay: 9s;
+  }
+  @keyframes scene {
+    0% {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    4%,
+    22% {
+      opacity: 1;
+      transform: none;
+    }
+    26%,
+    100% {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+  }
+  .lbl {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px !important;
+  }
+  .q {
+    font-size: 13px;
+    padding: 7px 12px;
+    border-radius: 10px;
+    background: var(--qbg);
+    margin-bottom: 9px !important;
+  }
+  .res {
+    font-size: 12.5px;
+    margin: 5px 0 !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .res i {
+    display: inline-block;
+    height: 5px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #4cc9ff, #8b5cf6);
+  }
+  .task {
+    font-size: 13.5px;
+    margin: 4px 0 !important;
+  }
+  .task b {
+    color: #34c77b;
+    margin-right: 8px;
+  }
+  .kg {
+    width: 100%;
+    height: 125px;
+  }
+  .kg line {
+    stroke: var(--line);
+    stroke-width: 1.4;
+  }
+  .kg circle {
+    fill: var(--qbg);
+    stroke: var(--accent);
+  }
+  .kg text {
+    fill: var(--cap);
+    font-size: 10px;
+    font-family: var(--font);
+  }
+  .faces {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    font-size: 52px;
+    justify-content: center;
+  }
+  .arrow {
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+  }
+  .dots {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px 18px;
+    margin: 14px 0 0;
+    font-size: 11.5px;
+  }
+  .dot {
+    color: var(--dotoff);
+    animation: dot 12s ease infinite;
+  }
+  .d2 {
+    animation-delay: 3s;
+  }
+  .d3 {
+    animation-delay: 6s;
+  }
+  .d4 {
+    animation-delay: 9s;
+  }
+  @keyframes dot {
+    0%,
+    24% {
+      color: var(--text);
+    }
+    26%,
+    100% {
+      color: var(--dotoff);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .screen {
+      width: 100%;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+      gap: 4px;
+    }
+    .scene {
+      grid-area: auto;
+      opacity: 1;
+    }
+    .dots {
+      display: none;
+    }
+  }
+</style>

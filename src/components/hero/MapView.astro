@@ -1,0 +1,151 @@
+---
+import { AREAS } from '../../data/areas';
+
+// Node positions in percent of the panel, matching the approved mockup.
+const POS: Record<string, { x: number; y: number; up?: boolean }> = {
+  'retrieval-search': { x: 18, y: 26 },
+  'ai-agents': { x: 80, y: 24 },
+  'knowledge-graphs': { x: 84, y: 66, up: true },
+  'generative-models': { x: 58, y: 84, up: true },
+  'llm-systems': { x: 20, y: 74, up: true },
+  'mlops-cloud': { x: 48, y: 15 },
+};
+const nodes = AREAS.map((a) => ({ ...a, ...POS[a.id] }));
+const cross = [
+  ['retrieval-search', 'llm-systems'],
+  ['ai-agents', 'knowledge-graphs'],
+  ['retrieval-search', 'mlops-cloud'],
+].map(([a, b]) => [POS[a], POS[b]]);
+---
+<div class="map">
+  <div class="graph">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      {nodes.map((n) => <line x1="50" y1="50" x2={n.x} y2={n.y} vector-effect="non-scaling-stroke" />)}
+      {cross.map(([a, b]) => <line x1={a.x} y1={a.y} x2={b.x} y2={b.y} vector-effect="non-scaling-stroke" />)}
+    </svg>
+    <span class="node me" style="left:50%;top:50%" aria-hidden="true">Abdul Basit</span>
+    {
+      nodes.map((n) => (
+        <a class:list={['node glass', { up: n.up }]} href={`/areas/${n.id}/`} style={`left:${n.x}%;top:${n.y}%`}>
+          {n.label}
+          <span class="cap">{n.caption}</span>
+        </a>
+      ))
+    }
+    <p class="hint muted">Hover an area to see what's in it. Click to open it.</p>
+  </div>
+  <ul class="map-list">
+    {
+      AREAS.map((a) => (
+        <li>
+          <a class="glass" href={`/areas/${a.id}/`}>
+            <strong>{a.label}</strong>
+            <span>{a.caption}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .graph {
+    position: relative;
+    height: 320px;
+  }
+  svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  line {
+    stroke: var(--line);
+    stroke-width: 1.2;
+    stroke-dasharray: 4 6;
+    animation: flow 3s linear infinite;
+  }
+  @keyframes flow {
+    to {
+      stroke-dashoffset: -20;
+    }
+  }
+  .node {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    color: var(--text);
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  a.node:hover,
+  a.node:focus-visible {
+    text-decoration: none;
+    transform: translate(-50%, -50%) scale(1.08);
+    box-shadow: 0 0 30px rgba(120, 160, 255, 0.55);
+    z-index: 3;
+  }
+  .cap {
+    position: absolute;
+    left: 50%;
+    top: calc(100% + 7px);
+    transform: translateX(-50%);
+    font-size: 11.5px;
+    font-weight: 400;
+    color: var(--cap);
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+  .up .cap {
+    top: auto;
+    bottom: calc(100% + 7px);
+  }
+  a.node:hover .cap,
+  a.node:focus-visible .cap {
+    opacity: 1;
+  }
+  .me {
+    padding: 9px 17px;
+    font-size: 14px;
+    color: #fff;
+    background: linear-gradient(135deg, rgba(94, 92, 230, 0.75), rgba(175, 82, 222, 0.65));
+    box-shadow: 0 0 30px rgba(140, 100, 255, 0.35);
+  }
+  .hint {
+    position: absolute;
+    left: 18px;
+    bottom: 4px;
+    margin: 0;
+    font-size: 11.5px;
+  }
+  .map-list {
+    display: none;
+    list-style: none;
+    margin: 0;
+    padding: 16px;
+    gap: 8px;
+  }
+  .map-list a {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 16px;
+    border-radius: 16px;
+    color: var(--text);
+  }
+  .map-list span {
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  @media (max-width: 640px) {
+    .graph {
+      display: none;
+    }
+    .map-list {
+      display: grid;
+    }
+  }
+</style>

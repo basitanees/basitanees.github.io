@@ -1,0 +1,78 @@
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #07080f;
+  --text: #e9ebff;
+  --muted: #9aa0c8;
+  --glass: rgba(28, 34, 82, 0.34);
+  --glass-solid: #161b3d;
+  --gb: rgba(140, 150, 255, 0.24);
+  --shadow: 0 0 40px rgba(110, 90, 255, 0.16);
+  --accent: #8f9bff;
+  --line: rgba(127, 150, 255, 0.45);
+  --hov: rgba(127, 140, 255, 0.3);
+  --qbg: rgba(127, 140, 255, 0.12);
+  --cap: #c9ceff;
+  --dotoff: #5c628f;
+  --seg: rgba(255, 255, 255, 0.16);
+  --b1: #3420d6;
+  --b2: #0b78b5;
+  --b3: #8a22d0;
+  --bo: 0.5;
+  --grid: 1;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #e9ecf5;
+  --text: #1d1d1f;
+  --muted: #55555a;
+  --glass: rgba(255, 255, 255, 0.42);
+  --glass-solid: #f6f7fb;
+  --gb: rgba(255, 255, 255, 0.85);
+  --shadow: 0 8px 32px rgba(31, 38, 135, 0.12);
+  --accent: #5e5ce6;
+  --line: rgba(94, 92, 230, 0.4);
+  --hov: rgba(255, 255, 255, 0.9);
+  --qbg: rgba(255, 255, 255, 0.6);
+  --cap: #3a3a3c;
+  --dotoff: #a1a1a6;
+  --seg: rgba(255, 255, 255, 0.95);
+  --b1: #7aa8ff;
+  --b2: #ff9ad5;
+  --b3: #7ef0d0;
+  --bo: 0.85;
+  --grid: 0;
+}
+
+/* Without JavaScript there is no data-theme, so follow the device. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    color-scheme: light;
+    --bg: #e9ecf5;
+    --text: #1d1d1f;
+    --muted: #55555a;
+    --glass: rgba(255, 255, 255, 0.42);
+    --glass-solid: #f6f7fb;
+    --gb: rgba(255, 255, 255, 0.85);
+    --shadow: 0 8px 32px rgba(31, 38, 135, 0.12);
+    --accent: #5e5ce6;
+    --line: rgba(94, 92, 230, 0.4);
+    --hov: rgba(255, 255, 255, 0.9);
+    --qbg: rgba(255, 255, 255, 0.6);
+    --cap: #3a3a3c;
+    --dotoff: #a1a1a6;
+    --seg: rgba(255, 255, 255, 0.95);
+    --b1: #7aa8ff;
+    --b2: #ff9ad5;
+    --b3: #7ef0d0;
+    --bo: 0.85;
+    --grid: 0;
+  }
+}
+
+:root {
+  --font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Inter, system-ui, sans-serif;
+  --mono: 'SF Mono', ui-monospace, Menlo, Consolas, monospace;
+  --radius: 24px;
+}

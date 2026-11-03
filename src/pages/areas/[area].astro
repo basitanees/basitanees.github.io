@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ProjectGrid from '../../components/ProjectGrid.astro';
+import { AREAS } from '../../data/areas';
+import { sortProjects, withArea } from '../../lib/projects';
+
+export function getStaticPaths() {
+  return AREAS.map((area) => ({ params: { area: area.id }, props: { area } }));
+}
+
+const { area } = Astro.props;
+const tagged = withArea(await getCollection('projects'), area.id);
+const work = sortProjects(tagged.filter((p) => p.data.section === 'work'));
+const research = sortProjects(tagged.filter((p) => p.data.section === 'research'));
+---
+<Base title={area.label} description={`${area.label}: ${area.caption}. Projects by Abdul Basit Anees.`}>
+  <section class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">Area</p>
+      <h1>{area.label}</h1>
+      <p class="muted">{area.caption}</p>
+    </header>
+    {
+      work.length > 0 && (
+        <>
+          <h2 class="section-title">Work</h2>
+          <ProjectGrid projects={work} />
+        </>
+      )
+    }
+    {
+      research.length > 0 && (
+        <>
+          <h2 class="section-title">Research</h2>
+          <ProjectGrid projects={research} />
+        </>
+      )
+    }
+  </section>
+</Base>

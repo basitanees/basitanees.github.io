@@ -1,0 +1,64 @@
+---
+import AreaChips from './AreaChips.astro';
+import { formatDates, projectHref, type P } from '../lib/projects';
+
+interface Props {
+  project: P;
+}
+const { project } = Astro.props;
+const { title, org, start, end, summary, areas, links } = project.data;
+const href = projectHref(project);
+const meta = [org, formatDates(start, end)].filter(Boolean).join(' · ');
+---
+<article class="card glass" data-project={project.id}>
+  <p class="meta">{meta}</p>
+  <h3>{href ? <a href={href}>{title}</a> : title}</h3>
+  <p class="summary">{summary}</p>
+  <AreaChips areas={areas} small />
+  {
+    links.length > 0 && (
+      <p class="links">
+        {links.map((l) => (
+          <a href={l.href}>{l.label} ↗</a>
+        ))}
+      </p>
+    )
+  }
+</article>
+
+<style>
+  .card {
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .meta {
+    margin: 0;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  h3 {
+    margin: 0;
+    font-size: 19px;
+  }
+  h3 a {
+    color: var(--text);
+  }
+  h3 a::after {
+    content: ' →';
+    color: var(--accent);
+  }
+  .summary {
+    margin: 0;
+    font-size: 14.5px;
+  }
+  .links {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-size: 13px;
+  }
+</style>

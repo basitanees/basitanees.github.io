@@ -1,0 +1,207 @@
+---
+import Base from '../layouts/Base.astro';
+import { CV } from '../data/cv';
+import { PUBLICATIONS } from '../data/publications';
+import { SITE } from '../data/site';
+import { formatDates } from '../lib/projects';
+import '../styles/print.css';
+---
+<Base title="CV" description="CV of Abdul Basit Anees, Research Engineer at aiXplain: retrieval, agents, knowledge graphs and generative-models research." current="cv">
+  <article class="wrap cv">
+    <header class="cv-head">
+      <p class="eyebrow no-print">CV</p>
+      <h1>{SITE.name}</h1>
+      <p class="headline">{SITE.headline}</p>
+      <p class="contact muted">
+        {CV.location} · <a href={`mailto:${SITE.email}`}>{SITE.email}</a> · <a href={SITE.linkedin}>LinkedIn</a> · <a href={SITE.github}>GitHub</a> ·
+        <a href={SITE.scholar}>Google Scholar</a>
+      </p>
+      <a class="download glass no-print" href={SITE.pdfPath} download>Download PDF</a>
+    </header>
+
+    <section class="block glass">
+      <h2>Summary</h2>
+      <p>{CV.summary}</p>
+    </section>
+
+    <section class="block glass">
+      <h2>Experience</h2>
+      {
+        CV.experience.map((r) => (
+          <div class="role">
+            <h3>
+              {r.title}, {r.org}
+            </h3>
+            <p class="meta muted">
+              {formatDates(r.start, r.end)} · {r.location}
+            </p>
+            <ul>
+              {r.bullets.map((b) => (
+                <li>{b}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </section>
+
+    <section class="block glass">
+      <h2>Publications</h2>
+      {
+        PUBLICATIONS.map((p) => (
+          <div class="item">
+            <h3>{p.title}</h3>
+            <p class="meta muted">
+              {p.authors.join(', ')}. {p.venue}.
+            </p>
+          </div>
+        ))
+      }
+    </section>
+
+    <section class="block glass">
+      <h2>Projects</h2>
+      {
+        CV.projects.map((p) => (
+          <div class="item">
+            <h3>{p.title}</h3>
+            <p class="meta muted">{p.dates}</p>
+            <p>{p.text}</p>
+          </div>
+        ))
+      }
+    </section>
+
+    <section class="block glass">
+      <h2>Education</h2>
+      {
+        CV.education.map((e) => (
+          <div class="item">
+            <h3>{e.degree}</h3>
+            <p class="meta muted">
+              {e.school} · {e.dates}
+            </p>
+            <p>{e.note}</p>
+          </div>
+        ))
+      }
+    </section>
+
+    <section class="block glass">
+      <h2>Skills</h2>
+      <dl class="skills">
+        {
+          CV.skills.map((s) => (
+            <div class="item">
+              <dt>{s.group}</dt>
+              <dd>{s.items}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <section class="block glass">
+      <h2>Languages</h2>
+      <p>{CV.languages.join(' · ')}</p>
+      <h2>Achievements</h2>
+      <ul>
+        {CV.achievements.map((a) => <li>{a}</li>)}
+      </ul>
+    </section>
+  </article>
+</Base>
+
+<style>
+  .cv {
+    max-width: 860px;
+  }
+  .cv-head {
+    margin: 12px 0 22px;
+  }
+  h1 {
+    font-size: clamp(32px, 6vw, 48px);
+    margin: 6px 0 4px;
+  }
+  .headline {
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+  .contact {
+    margin: 0 0 16px;
+    font-size: 14px;
+  }
+  .download {
+    display: inline-block;
+    padding: 9px 18px;
+    border-radius: 999px;
+    color: var(--text);
+    font-weight: 600;
+  }
+  .download:hover {
+    text-decoration: none;
+    background: var(--hov);
+  }
+  .block {
+    border-radius: var(--radius);
+    padding: 6px 24px 14px;
+    margin-bottom: 16px;
+  }
+  h2 {
+    font-size: 20px;
+    margin: 18px 0 10px;
+  }
+  h3 {
+    font-size: 16px;
+    margin: 14px 0 2px;
+  }
+  .meta {
+    margin: 0 0 6px;
+    font-size: 13.5px;
+  }
+  ul {
+    margin: 4px 0 8px;
+    padding-left: 20px;
+  }
+  li,
+  p {
+    font-size: 15px;
+  }
+  .skills {
+    margin: 0;
+  }
+  .skills .item {
+    margin-bottom: 8px;
+  }
+  dt {
+    font-weight: 600;
+  }
+  dd {
+    margin: 0;
+    color: var(--muted);
+  }
+  @media print {
+    .block {
+      padding: 0;
+      margin: 0 0 4mm;
+    }
+    h1 {
+      font-size: 22pt;
+    }
+    h2 {
+      font-size: 13pt;
+      margin: 3mm 0 1.5mm;
+      border-bottom: 0.5pt solid #999;
+    }
+    h3 {
+      font-size: 10.5pt;
+      margin: 2mm 0 0;
+    }
+    li,
+    p,
+    .meta,
+    dd {
+      font-size: 9.5pt;
+    }
+  }
+</style>
