@@ -30,9 +30,14 @@ test('the Koder card links the product page', async ({ page }) => {
   await expect(page.locator('[data-project="koder"]').getByRole('link', { name: /Product page/ })).toHaveAttribute('href', 'https://www.aixplain.com/koder');
 });
 
-test('the voice agent has its own page', async ({ page }) => {
+test('the voice agent page covers the studio, evals and prompt optimization', async ({ page }) => {
   await page.goto('/work/voice-agent/');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Voice customer-service agent');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Voice agents and call center studio');
+  const main = page.getByRole('main');
+  for (const text of ['prompt versioning', 'text-to-speech', 'speech-to-text', 'production logs', 'GEPA']) {
+    await expect(main).toContainText(text);
+  }
+  await expect(main.getByRole('link', { name: 'GEPA' })).toHaveAttribute('href', 'https://arxiv.org/abs/2507.19457');
 });
 
 test('the home page features the voice agent and asks about evals', async ({ page }) => {

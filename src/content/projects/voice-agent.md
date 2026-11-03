@@ -1,5 +1,5 @@
 ---
-title: Voice customer-service agent
+title: Voice agents and call center studio
 section: work
 form: page
 areas: [ai-agents, llm-systems]
@@ -7,21 +7,34 @@ org: aiXplain
 role: Research Engineer
 start: '2023-06'
 end: present
-summary: A voice customer-service agent I built end to end for a client, from the first idea to live calls. It answers from the client's customer data through SQL, and an eval harness keeps finding its failures and making it better.
+summary: A call center studio I designed for building voice agents, a voice customer-service agent I built end to end for a client, and the evals and prompt optimization that keep it getting better.
 order: 15
 ---
 
-I built this voice agent for a client end to end, from the first idea to live calls. Callers ask questions, and the agent answers from the client's customer data by running SQL queries against it.
+## The call center studio
 
-## An agent that keeps getting better
+I designed a whole call center studio for building voice agents. In it, users can:
 
-Shipping the first version is the easy part. The real work is improving it from what real callers do, without fitting it to its own tests. So I built an eval harness around it:
+- define agent profiles and their prompts, with prompt versioning;
+- set up the agent and its LLM;
+- choose and tune the text-to-speech and speech-to-text models.
 
-- **Live logs become tests.** Customer logs are evaluated continuously, and every failure turns into a new test case on the fly.
-- **No lucky passes.** Each test case runs several times before it counts.
-- **Budgeted prompt optimization.** Prompt optimization runs within an LLM budget the user chooses, and keeps going until the test cases pass.
-- **A held-out check.** Every change is checked against a held-out set, so the agent doesn't overfit to the tests it learned from.
+Each agent keeps an internal memory of the call, which it can look up and update as the conversation goes. And I tuned the whole studio for latency and a smooth experience, because on a phone call every pause shows.
 
-## Where it got to
+## A voice agent for a client
 
-The agent now follows its instructions on live calls, and the evals keep catching new failures as callers find them.
+I built a voice customer-service agent for a client end to end, from the first idea to live calls. Callers ask questions, and the agent answers from the client's customer data by running SQL queries against it.
+
+It now follows its instructions on live calls.
+
+## Evals that keep finding failures
+
+- **Mined from production logs.** Calls are evaluated continuously, and every failure becomes a new test case on the fly.
+- **Written from guidance.** I can generate new test cases, or improve existing ones, by describing what I want in plain text.
+- **Run with repeats.** Every test case runs several times, so the agent has to pass consistently, not once by luck.
+
+## Prompt optimization with GEPA
+
+On top of the evals, I built a prompt optimization loop on [GEPA](https://arxiv.org/abs/2507.19457), the reflective prompt-evolution method from Agrawal et al. (2025). It rewrites the agent's prompt to score better on the test cases, within a dollar budget, an iteration budget and any constraints the user sets.
+
+A held-out set checks every improvement, so the prompt doesn't overfit to the tests it learned from.
