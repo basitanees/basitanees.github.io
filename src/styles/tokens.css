@@ -38,27 +38,7 @@
   --highlight: none;
 }
 
-/* Without JavaScript there is no data-theme, so follow the device. */
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) {
-    color-scheme: light;
-    --bg: #f5f7fa;
-    --surface: #ffffff;
-    --raised: #eceff4;
-    --text: #111827;
-    --text-2: #4b5565;
-    --muted: #6b7487;
-    --line: rgba(17, 24, 39, 0.08);
-    --line-strong: rgba(17, 24, 39, 0.16);
-    --accent: #2557d6;
-    --positive: #16a34a;
-    --button: #111827;
-    --button-text: #ffffff;
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-float: 0 8px 24px rgba(0, 0, 0, 0.06);
-    --highlight: none;
-  }
-}
+/* Without JavaScript there is no data-theme, so the dark tokens above apply. */
 
 :root {
   --font: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;

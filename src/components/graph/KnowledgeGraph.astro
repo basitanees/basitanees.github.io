@@ -1,0 +1,114 @@
+---
+import { getCollection } from 'astro:content';
+import { AREAS } from '../../data/areas';
+import { buildGraphPayload } from '../../lib/graph-payload';
+
+const payload = buildGraphPayload(await getCollection('projects'));
+const json = JSON.stringify(payload).replace(/</g, '\\u003c');
+
+// Area colours as CSS variables, per theme, so the graph follows the theme toggle.
+const vars = (k: 'dark' | 'light') => AREAS.map((a) => `--kg-${a.id}: ${a.color[k]};`).join(' ');
+const colours = `:root, :root[data-theme='dark'] { ${vars('dark')} }
+:root[data-theme='light'] { ${vars('light')} }`;
+---
+<style is:inline set:html={colours}></style>
+<div class="kg" data-kg>
+  <ol class="kg-list">
+    {
+      AREAS.map((a) => (
+        <li>
+          <a href={`/areas/${a.id}/`}>
+            <span class="swatch" style={`background: var(--kg-${a.id})`} />
+            <span>
+              <strong>{a.label}</strong>
+              <span class="sub">{a.caption}</span>
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+  <button class="kg-open" type="button">Explore the graph</button>
+  <div class="kg-stage">
+    <svg role="group" aria-label="Knowledge graph of Abdul Basit's work"></svg>
+    <div class="kg-card" aria-live="polite"></div>
+    <button class="kg-full" type="button">Full screen</button>
+    <button class="kg-close" type="button">Close</button>
+    <p class="kg-hint">
+      <span>Click an area to open it, click again to fold it.</span>
+      <span class="legend"><span><i></i>belongs to</span><span><i class="x"></i>related</span><span><i class="ring"></i>paper</span></span>
+    </p>
+  </div>
+  <script type="application/json" data-kg-payload set:html={json} />
+</div>
+
+<script>
+  import { mountGraph } from './graph-client';
+  document.querySelectorAll<HTMLElement>('[data-kg]').forEach((root) => {
+    const data = root.querySelector('[data-kg-payload]')?.textContent;
+    if (data) mountGraph(root, JSON.parse(data));
+  });
+</script>
+
+<style is:global>
+  .kg { position: relative; }
+  .kg-list { list-style: none; margin: 0; padding: 8px; }
+  .kg-list a { display: flex; gap: 12px; align-items: baseline; padding: 10px 12px; border-radius: 8px; color: var(--text); }
+  .kg-list a:hover { text-decoration: none; background: var(--raised); }
+  .kg-list .swatch { flex: none; width: 8px; height: 8px; border-radius: 50%; }
+  .kg-list strong { display: block; font-weight: 500; font-size: 15px; }
+  .kg-list .sub { font-size: 13px; color: var(--text-2); }
+  .kg-stage, .kg-open, .kg-close { display: none; }
+  .kg.is-live .kg-list { display: none; }
+  .kg.is-live .kg-stage { display: block; position: relative; height: 460px; }
+  .kg svg { display: block; width: 100%; height: 100%; }
+  .kg .n, .kg.is-full svg { touch-action: none; }
+  .kg-bg { fill: transparent; }
+  .kg-hint { position: absolute; left: 16px; right: 16px; bottom: 10px; margin: 0; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font-size: 11.5px; color: var(--muted); pointer-events: none; }
+  .kg-hint .legend { display: flex; gap: 12px; align-items: center; }
+  .kg-hint i { display: inline-block; width: 16px; height: 0; border-top: 1px solid var(--line-strong); vertical-align: middle; margin-right: 5px; }
+  .kg-hint i.x { border-top: 1px dashed var(--accent); }
+  .kg-hint i.ring { width: 8px; height: 8px; border: 1px solid var(--text-2); border-radius: 50%; box-shadow: 0 0 0 2px var(--surface), 0 0 0 3px var(--text-2); }
+  .kg-full, .kg-close, .kg-open { font: inherit; font-size: 12px; color: var(--text-2); background: var(--raised); border: 1px solid var(--line); border-radius: 8px; padding: 5px 10px; cursor: pointer; }
+  .kg-full:hover, .kg-close:hover, .kg-open:hover { color: var(--text); border-color: var(--line-strong); }
+  .kg-full, .kg-close { position: absolute; top: 12px; left: 12px; z-index: 3; }
+  .kg.is-live .kg-full { display: block; }
+  .kg-card { position: absolute; top: 12px; right: 12px; z-index: 3; width: min(300px, calc(100% - 24px)); padding: 14px 16px; border-radius: 12px; font-size: 13px; line-height: 1.45; color: var(--text);
+    background: color-mix(in srgb, var(--raised) 86%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid var(--line);
+    opacity: 0; transform: translateY(-6px); transition: opacity 0.2s, transform 0.2s; pointer-events: none; }
+  .kg-card.on { opacity: 1; transform: none; pointer-events: auto; }
+  .kg-card strong { font-weight: 600; }
+  .kg-card .badge { margin-left: 6px; padding: 1px 6px; border-radius: 6px; font-size: 10.5px; background: var(--text-2); color: var(--surface); vertical-align: 1px; }
+  .kg-card .meta { display: block; margin-top: 2px; font-size: 11.5px; color: var(--muted); }
+  .kg-card .sum { display: block; margin-top: 8px; color: var(--text-2); }
+  .kg-card .parts { display: block; margin-top: 8px; font-size: 11.5px; color: var(--muted); }
+  .kg-card a { display: inline-block; margin-top: 8px; font-size: 12.5px; }
+  .kg .n { cursor: pointer; outline: none; }
+  .kg .n.me { cursor: default; }
+  .kg .n:focus-visible .dot { stroke: var(--accent) !important; stroke-width: 3px !important; }
+  .kg .n text { font-size: 11px; fill: var(--text-2); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; pointer-events: none; transition: opacity 0.3s; }
+  .kg .n.area text.lbl { font-size: 12.5px; font-weight: 500; fill: var(--text); }
+  .kg .n.me text.lbl { font-size: 13.5px; font-weight: 600; fill: var(--text); }
+  .kg .n.project text.lbl { fill: var(--text); }
+  .kg .n text.cap { font-size: 9.5px; fill: var(--muted); }
+  .kg .n:hover text.lbl { fill: var(--text); }
+  .kg .n circle { transition: opacity 0.3s; }
+  .kg .n.dim circle { opacity: 0.28; }
+  .kg .n.dim text { opacity: 0.32; }
+  .kg .n.area.dim text.lbl { opacity: 0.5; }
+  .kg path { fill: none; transition: opacity 0.3s; }
+  .kg path.e { stroke: var(--line-strong); stroke-width: 1; }
+  .kg path.x { stroke: var(--accent); stroke-opacity: 0.55; stroke-width: 1; stroke-dasharray: 3 4; animation: kg-flow 5s linear infinite; }
+  .kg path.dim { opacity: 0.12; }
+  @keyframes kg-flow { to { stroke-dashoffset: -70; } }
+  @media (prefers-reduced-motion: reduce) { .kg path.x { animation: none; } }
+  .kg.is-full { position: fixed; inset: 16px; z-index: 100; border-radius: 16px; border: 1px solid var(--line); background: var(--surface); box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45); }
+  .kg.is-full .kg-stage { display: block; height: 100%; }
+  .kg.is-full .kg-list, .kg.is-full .kg-open, .kg.is-full .kg-full { display: none; }
+  .kg.is-full .kg-close { display: block; }
+  @media (max-width: 640px) {
+    .kg.is-live:not(.is-full) .kg-stage { display: none; }
+    .kg.is-live:not(.is-full) .kg-list { display: block; }
+    .kg.is-live:not(.is-full) .kg-open { display: block; margin: 0 20px 16px; }
+  }
+</style>

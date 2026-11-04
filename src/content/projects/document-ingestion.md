@@ -2,7 +2,7 @@
 title: 'Document ingestion pipelines'
 section: work
 form: card
-areas: [retrieval-search, llm-systems]
+areas: [retrieval-rag]
 org: 'aiXplain'
 role: 'Research Engineer'
 start: '2023-06'

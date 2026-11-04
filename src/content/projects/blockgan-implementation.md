@@ -2,7 +2,7 @@
 title: 'BlockGAN, reimplemented in Julia'
 section: research
 form: card
-areas: [generative-models]
+areas: [ml-foundations, generative-vision]
 org: 'Koç University'
 start: '2020-10'
 end: '2021-01'

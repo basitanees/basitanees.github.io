@@ -1,7 +1,7 @@
 ---
 import { SITE } from '../../data/site';
 import Icon from '../Icon.astro';
-import MapView from './MapView.astro';
+import KnowledgeGraph from '../graph/KnowledgeGraph.astro';
 import AskView from './AskView.astro';
 import ReelView from './ReelView.astro';
 
@@ -19,9 +19,20 @@ const VIEWS = [
       I build the retrieval and agent systems that LLMs read from and act through, and I benchmark every retrieval change before it ships. My research is on
       generative models, published at SIGGRAPH Asia and in ACM Transactions on Graphics.
     </p>
+    <dl class="proof">
+      {
+        SITE.proof.map(([label, value]) => (
+          <>
+            <dt>{label}</dt>
+            <dd>{value}</dd>
+          </>
+        ))
+      }
+    </dl>
     <p class="actions">
       <a class="button button-primary" href="/work/">View work <Icon name="arrow-right" /></a>
       <a class="button button-secondary" href={SITE.pdfPath}>Download CV <Icon name="download" /></a>
+      <a class="button button-secondary" href="/contact/">Contact</a>
     </p>
   </div>
 
@@ -40,7 +51,7 @@ const VIEWS = [
       </fieldset>
     </div>
     <div class="panel">
-      <div class="view" data-view="map"><MapView /></div>
+      <div class="view" data-view="map"><KnowledgeGraph /></div>
       <div class="view" data-view="ask"><AskView /></div>
       <div class="view" data-view="reel"><ReelView /></div>
     </div>
@@ -72,7 +83,21 @@ const VIEWS = [
     font-size: 16px;
     line-height: 1.65;
     color: var(--text-2);
-    margin: 0 0 32px;
+    margin: 0 0 24px;
+  }
+  .proof {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 16px;
+    margin: 0 0 28px;
+    font-size: 14px;
+  }
+  .proof dt {
+    color: var(--muted);
+  }
+  .proof dd {
+    margin: 0;
+    color: var(--text);
   }
   .actions {
     display: flex;

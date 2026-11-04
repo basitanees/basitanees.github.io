@@ -2,7 +2,7 @@
 title: 'Speech recognition and model deployment'
 section: work
 form: card
-areas: [mlops-cloud]
+areas: [ml-foundations, ml-infrastructure]
 org: 'aiXplain'
 role: 'Research Engineer'
 start: '2023-06'

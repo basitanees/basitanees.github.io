@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { formatDates, inSection, projectHref, sortProjects, withArea } from '../../src/lib/projects.ts';
 
 const p = (id, data) => ({ id, data: { areas: [], links: [], summary: '', start: '2020', ...data } });
-const hypergan = p('hypergan-clip', { title: 'HyperGAN-CLIP', section: 'research', form: 'page', order: 10, areas: ['generative-models'] });
+const hypergan = p('hypergan-clip', { title: 'HyperGAN-CLIP', section: 'research', form: 'page', order: 10, areas: ['generative-vision'] });
 const koder = p('koder', { title: 'Koder', section: 'work', form: 'card', order: 40, areas: ['ai-agents'] });
 const assess = p('candidate-assessment', { title: 'Candidate assessment', section: 'work', alsoIn: 'research', form: 'page', order: 20 });
 

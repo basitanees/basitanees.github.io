@@ -2,7 +2,7 @@
 title: HyperGAN-CLIP
 section: research
 form: page
-areas: [generative-models]
+areas: [ml-foundations, generative-vision]
 org: KUIS AI Center, Koç University
 start: '2024'
 summary: One pretrained StyleGAN that adapts to new domains from a single image and edits real photos from a reference image or a line of text. My first-author paper at SIGGRAPH Asia 2024.

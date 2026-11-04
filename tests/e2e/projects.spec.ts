@@ -16,8 +16,8 @@ test('a card-form project has no detail link', async ({ page }) => {
 });
 
 test('an area page lists projects from that area', async ({ page }) => {
-  await page.goto('/areas/generative-models/');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Generative models');
+  await page.goto('/areas/generative-vision/');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Generative vision research');
   await expect(page.locator('[data-project="hypergan-clip"]')).toBeVisible();
 });
 

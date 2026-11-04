@@ -23,7 +23,7 @@ export const ASK = [
   {
     id: 'fundamentals',
     question: 'How well do you know the fundamentals?',
-    answer: 'From 2018 to 2023 I wrote models from scratch: linear and logistic regression, KNN, SVM, RNNs, transformers and GANs, then again in PyTorch and TensorFlow. Since 2023 I have worked mostly on LLMs, agents and retrieval.',
+    answer: 'From 2018 I wrote models from scratch: linear and logistic regression, KNN, SVM, RNNs, transformers and GANs. In 2020 I moved to PyTorch and TensorFlow and kept building from scratch on the side. Since 2023 I have worked mostly on LLMs, agents and retrieval.',
     href: '/research/',
     linkLabel: 'Open research',
   },

@@ -2,7 +2,7 @@
 title: CLIPInverter
 section: research
 form: page
-areas: [generative-models]
+areas: [ml-foundations, generative-vision]
 org: KUIS AI Center, Koç University
 start: '2021-04'
 end: '2023'

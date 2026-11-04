@@ -2,7 +2,7 @@
 title: 'Agent memory'
 section: work
 form: card
-areas: [ai-agents]
+areas: [knowledge-graphs, ai-agents]
 org: 'aiXplain'
 role: 'Research Engineer'
 start: '2023-06'

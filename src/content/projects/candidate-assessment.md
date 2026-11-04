@@ -3,7 +3,7 @@ title: HR manager
 section: work
 alsoIn: research
 form: page
-areas: [ai-agents, llm-systems]
+areas: [agentic-systems]
 org: aiXplain
 role: Research Engineer
 start: '2023-06'

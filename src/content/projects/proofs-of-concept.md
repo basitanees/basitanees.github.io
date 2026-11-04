@@ -2,7 +2,7 @@
 title: 'Proofs of concept'
 section: work
 form: card
-areas: [llm-systems]
+areas: [agentic-systems]
 org: 'aiXplain'
 role: 'Research Engineer'
 start: '2023-06'

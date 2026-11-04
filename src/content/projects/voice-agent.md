@@ -2,7 +2,7 @@
 title: Voice agents and call center studio
 section: work
 form: page
-areas: [ai-agents, llm-systems]
+areas: [ai-agents, agentic-systems]
 org: aiXplain
 role: Research Engineer
 start: '2023-06'

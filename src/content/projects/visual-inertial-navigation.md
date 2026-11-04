@@ -2,7 +2,7 @@
 title: 'Visual-Inertial Integrated Navigation System'
 section: research
 form: card
-areas: []
+areas: [ml-foundations]
 org: 'Bilkent University, for Ardic Labs'
 start: '2019-09'
 end: '2020-07'

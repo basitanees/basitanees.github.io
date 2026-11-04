@@ -2,7 +2,7 @@
 title: 'Insurance backend services'
 section: work
 form: card
-areas: [mlops-cloud]
+areas: []
 org: 'Radity'
 role: 'Backend Developer'
 start: '2022-08'

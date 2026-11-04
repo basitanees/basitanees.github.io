@@ -7,4 +7,9 @@ export const SITE = {
   github: 'https://github.com/basitanees',
   scholar: 'https://scholar.google.com/citations?user=pbmJc-MAAAAJ&hl=en',
   pdfPath: '/abdul-basit-anees-cv.pdf',
+  proof: [
+    ['Now', 'Research Engineer, aiXplain'],
+    ['Before', 'KUIS AI Center · Fraunhofer IIS · Radity'],
+    ['Published', 'SIGGRAPH Asia · ACM TOG · EACL'],
+  ],
 } as const;
