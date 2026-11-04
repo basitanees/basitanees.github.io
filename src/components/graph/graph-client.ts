@@ -23,6 +23,10 @@ export function mountGraph(root: HTMLElement, payload: GraphPayload): void {
   const gE = svg.append('g');
   const gN = svg.append('g');
   let W = 640;
+  let CX = 320;
+  let LEFT = 56;
+  let TOP = 44;
+  let CY = 230;
   let H = 460;
   let state: ViewState = { expanded: new Set(), focus: null };
   const store = new Map<string, SNode>();
@@ -43,23 +47,45 @@ export function mountGraph(root: HTMLElement, payload: GraphPayload): void {
   let edgeSel = gE.selectAll<SVGPathElement, SLink>('path');
 
   function resize() {
+    const oldW = W;
+    const oldH = H;
     W = Math.max(280, svgEl.clientWidth);
     H = Math.max(280, svgEl.clientHeight);
+    // In the hero the graph keeps clear of the text: --kg-left-from-center is where the text column ends,
+    // in px from the middle of the page. The graph centres itself in the space to the right of that.
+    const edge = parseFloat(getComputedStyle(root).getPropertyValue('--kg-left-from-center'));
+    LEFT = !root.classList.contains('is-full') && Number.isFinite(edge) ? Math.max(56, W / 2 + edge) : 56;
+    CX = LEFT === 56 ? W / 2 : (LEFT + W) / 2;
+    const top = parseFloat(getComputedStyle(root).getPropertyValue('--kg-top'));
+    TOP = !root.classList.contains('is-full') && Number.isFinite(top) ? Math.max(44, top + 24) : 44;
+    CY = (TOP + H - 44) / 2;
+    // Stretch the current layout to the new size so it fills the space at once.
+    for (const n of store.values()) {
+      if (n.x != null) n.x *= W / oldW;
+      if (n.y != null) n.y *= H / oldH;
+    }
     svg.attr('viewBox', `0 0 ${W} ${H}`);
     bg.attr('width', W).attr('height', H);
     const me = store.get('me');
-    if (me) { me.fx = W / 2; me.fy = H / 2; }
-    (sim.force('x') as ReturnType<typeof forceX<SNode>>).x(W / 2);
-    (sim.force('y') as ReturnType<typeof forceY<SNode>>).y(H / 2);
+    if (me) { me.fx = CX; me.fy = CY; }
     if (nodes.length) applyForces();
     sim.alpha(0.7).restart();
   }
 
+  // Areas sit on an ellipse sized to the panel, so the graph fits its width as well as its height.
+  const ringIndex = new Map(payload.areas.map((a, i) => [a.id, i]));
+  const ring = (d: SNode, axis: 'x' | 'y') => {
+    const ang = -Math.PI / 2 + ((ringIndex.get(d.area!) ?? 0) * 2 * Math.PI) / payload.areas.length;
+    return axis === 'x' ? CX + Math.cos(ang) * Math.min(CX, W - CX) * 0.68 : CY + Math.sin(ang) * (H - 44 - TOP) * 0.36;
+  };
+
   function applyForces() {
     const scale = Math.min(1, W / 900);
+    (sim.force('x') as ReturnType<typeof forceX<SNode>>).x((d) => (d.kind === 'area' ? ring(d, 'x') : CX)).strength((d) => (d.kind === 'area' ? 0.18 : 0.02));
+    (sim.force('y') as ReturnType<typeof forceY<SNode>>).y((d) => (d.kind === 'area' ? ring(d, 'y') : CY)).strength((d) => (d.kind === 'area' ? 0.18 : 0.03));
     sim.force<ReturnType<typeof forceLink<SNode, SLink>>>('link')!.links(links)
       .distance((l) => (l.kind === 'related' ? 220 : (l.source as SNode).kind === 'me' ? Math.min(W, H) * 0.36 : 62 * Math.max(0.8, scale)))
-      .strength((l) => (l.kind === 'related' ? 0.01 : (l.source as SNode).kind === 'me' ? 0.3 : 0.7));
+      .strength((l) => (l.kind === 'related' ? 0.01 : (l.source as SNode).kind === 'me' ? 0.04 : 0.7));
     sim.force<ReturnType<typeof forceManyBody<SNode>>>('charge')!.strength((d) => ({ me: -600, area: -420, entry: -160, project: -120 })[d.kind]);
     sim.force<ReturnType<typeof forceCollide<SNode>>>('collide')!.radius((d) => ({ me: 44, area: 54, entry: 36, project: 38 })[d.kind]);
 
@@ -67,21 +93,19 @@ export function mountGraph(root: HTMLElement, payload: GraphPayload): void {
 
   function render() {
     const g = visibleGraph(payload, state.expanded);
-    const areas = payload.areas.map((a) => a.id);
     nodes = g.nodes.map((v) => {
       const n = Object.assign(store.get(v.id) ?? ({} as SNode), v);
       store.set(v.id, n);
       if (n.x == null || !shown.has(v.id)) {
-        if (v.kind === 'me') { n.x = W / 2; n.y = H / 2; }
+        if (v.kind === 'me') { n.x = CX; n.y = CY; }
         else if (v.kind === 'area' && n.x == null) {
-          const ang = -Math.PI / 2 + (areas.indexOf(v.area!) * 2 * Math.PI) / areas.length;
-          n.x = W / 2 + Math.cos(ang) * W * 0.3; n.y = H / 2 + Math.sin(ang) * H * 0.32;
+          n.x = ring(n, 'x'); n.y = ring(n, 'y');
         } else if (v.kind !== 'area') {
           const p = store.get(v.parent!)!;
           n.x = p.x! + (Math.random() - 0.5) * 20; n.y = p.y! + (Math.random() - 0.5) * 20; n.vx = 0; n.vy = 0;
         }
       }
-      if (v.kind === 'me') { n.fx = W / 2; n.fy = H / 2; }
+      if (v.kind === 'me') { n.fx = CX; n.fy = CY; }
       return n;
     });
     shown = new Set(nodes.map((n) => n.id));
@@ -110,7 +134,7 @@ export function mountGraph(root: HTMLElement, payload: GraphPayload): void {
       .style('fill', colour).style('fill-opacity', (d) => (d.open ? 0.2 : 0.13));
     nodeSel.select('circle.ring').attr('r', (d) => (d.paper ? radius(d) + 3.5 : 0)).style('fill', 'none').style('stroke', colour);
     nodeSel.select('circle.dot').attr('r', radius)
-      .style('fill', (d) => (d.kind === 'project' ? 'var(--surface)' : colour(d)))
+      .style('fill', (d) => (d.kind === 'project' ? 'var(--kg-halo, var(--surface))' : colour(d)))
       .style('stroke', (d) => (d.open ? 'var(--text)' : colour(d)))
       .style('stroke-width', (d) => (d.kind === 'project' ? 1.6 : d.open ? 1.5 : 0));
     nodeSel.select('text.lbl').text((d) => d.label).attr('y', (d) => radius(d) + (d.paper ? 17 : 14));
@@ -132,8 +156,9 @@ export function mountGraph(root: HTMLElement, payload: GraphPayload): void {
   function ticked() {
     for (const n of nodes) {
       if (n.fx != null) continue;
-      n.x = Math.max(56, Math.min(W - 56, n.x!));
-      n.y = Math.max(44, Math.min(H - 44, n.y!));
+      const m = n.kind === 'area' ? 96 : 56; // area captions are wide
+      n.x = Math.max(LEFT + m - 56, Math.min(W - m, n.x!));
+      n.y = Math.max(TOP, Math.min(H - 44, n.y!));
     }
     nodeSel.attr('transform', (d) => `translate(${d.x},${d.y})`);
     edgeSel.attr('d', (d) => {
@@ -192,6 +217,16 @@ export function mountGraph(root: HTMLElement, payload: GraphPayload): void {
   root.querySelector<HTMLElement>('.kg-full')?.addEventListener('click', (e) => open(e.currentTarget as HTMLElement));
   root.querySelector<HTMLElement>('.kg-open')?.addEventListener('click', (e) => open(e.currentTarget as HTMLElement));
   root.querySelector<HTMLElement>('.kg-close')?.addEventListener('click', close);
+  root.querySelector<HTMLElement>('.kg-reset')?.addEventListener('click', () => {
+    state = { expanded: new Set(), focus: null };
+    showCard(null);
+    // Put the areas back on their ring and forget everything that was opened.
+    for (const [key, n] of store) {
+      if (n.kind === 'area') { n.x = ring(n, 'x'); n.y = ring(n, 'y'); n.vx = 0; n.vy = 0; }
+      else if (n.kind !== 'me') store.delete(key);
+    }
+    render();
+  });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && root.classList.contains('is-full')) close(); });
 
   new ResizeObserver(() => { if (svgEl.clientWidth) resize(); }).observe(svgEl);

@@ -11,32 +11,34 @@ const VIEWS = [
   { id: 'reel', label: 'Reel' },
 ];
 ---
-<section class="hero wrap">
-  <div class="text">
-    <h1>{SITE.name}</h1>
-    <p class="headline">{SITE.headline}</p>
-    <p class="intro">
-      I build the retrieval and agent systems that LLMs read from and act through, and I benchmark every retrieval change before it ships. My research is on
-      generative models, published at SIGGRAPH Asia and in ACM Transactions on Graphics.
-    </p>
-    <dl class="proof">
-      {
-        SITE.proof.map(([label, value]) => (
-          <>
-            <dt>{label}</dt>
-            <dd>{value}</dd>
-          </>
-        ))
-      }
-    </dl>
-    <p class="actions">
-      <a class="button button-primary" href="/work/">View work <Icon name="arrow-right" /></a>
-      <a class="button button-secondary" href={SITE.pdfPath}>Download CV <Icon name="download" /></a>
-      <a class="button button-secondary" href="/contact/">Contact</a>
-    </p>
+<section class="hero">
+  <div class="inner wrap">
+    <div class="text">
+      <h1>{SITE.name}</h1>
+      <p class="headline">{SITE.headline}</p>
+      <p class="intro">
+        I build the retrieval and agent systems that LLMs read from and act through, and I benchmark every retrieval change before it ships. My research is on
+        generative models, published at SIGGRAPH Asia and in ACM Transactions on Graphics.
+      </p>
+      <dl class="proof">
+        {
+          SITE.proof.map(([label, value]) => (
+            <>
+              <dt>{label}</dt>
+              <dd>{value}</dd>
+            </>
+          ))
+        }
+      </dl>
+      <p class="actions">
+        <a class="button button-primary" href="/work/">View work <Icon name="arrow-right" /></a>
+        <a class="button button-secondary" href={SITE.pdfPath}>Download CV <Icon name="download" /></a>
+        <a class="button button-secondary" href="/contact/">Contact</a>
+      </p>
+    </div>
   </div>
-
-  <div class="views console surface">
+  <div class="fade" aria-hidden="true"></div>
+  <div class="views">
     <div class="head">
       <fieldset class="seg">
         <legend class="sr-only">Choose a view</legend>
@@ -51,21 +53,43 @@ const VIEWS = [
       </fieldset>
     </div>
     <div class="panel">
-      <div class="view" data-view="map"><KnowledgeGraph /></div>
-      <div class="view" data-view="ask"><AskView /></div>
-      <div class="view" data-view="reel"><ReelView /></div>
+      <div class="view" data-view="map"><KnowledgeGraph bleed /></div>
+      <div class="view boxed surface" data-view="ask"><AskView /></div>
+      <div class="view boxed surface" data-view="reel"><ReelView /></div>
     </div>
   </div>
 </section>
 
 <style>
+  /* The graph fills the whole hero on the page background; the text sits on top, lined up with the rest of the page. */
   .hero {
-    display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    gap: 64px;
+    position: relative;
+    display: flex;
     align-items: center;
+    min-height: clamp(640px, 84vh, 880px);
+  }
+  .inner {
+    position: relative;
+    z-index: 2;
     padding-top: 48px;
-    padding-bottom: 32px;
+    padding-bottom: 48px;
+    pointer-events: none;
+  }
+  .text {
+    max-width: 470px;
+    pointer-events: auto;
+  }
+  .fade {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(90deg, var(--bg) 0, var(--bg) calc(50% - 260px), transparent calc(50% - 20px));
+  }
+  .views {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
   }
   h1 {
     font-size: clamp(40px, 5.5vw, 60px);
@@ -105,17 +129,21 @@ const VIEWS = [
     gap: 12px;
     margin: 0;
   }
-  .console {
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: var(--shadow-float), var(--highlight);
-  }
   .head {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 24px;
     display: flex;
-    align-items: center;
-    height: 52px;
-    padding: 0 12px;
-    border-bottom: 1px solid var(--line);
+    justify-content: flex-end;
+    pointer-events: none;
+  }
+  .seg {
+    pointer-events: auto;
   }
   .seg {
     display: inline-flex;
@@ -148,8 +176,23 @@ const VIEWS = [
     outline-offset: 2px;
   }
   .panel {
+    position: absolute;
+    inset: 0;
     display: grid;
-    min-height: 400px;
+  }
+  [data-view='map'] {
+    height: 100%;
+  }
+  .boxed {
+    align-self: center;
+    justify-self: end;
+    --inset: max(24px, calc((100% - 1120px) / 2 + 24px));
+    /* Narrower, and never left of the page centre, so it stays clear of the text. */
+    width: min(520px, calc(50% - var(--inset) - 16px));
+    margin-right: var(--inset);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-float), var(--highlight);
   }
   .view {
     grid-area: 1 / 1;
@@ -165,9 +208,47 @@ const VIEWS = [
   }
   @media (max-width: 960px) {
     .hero {
-      grid-template-columns: 1fr;
-      gap: 40px;
+      display: block;
+      min-height: 0;
+    }
+    .inner {
       padding-top: 16px;
+      padding-bottom: 32px;
+    }
+    .text {
+      max-width: none;
+    }
+    .fade {
+      display: none;
+    }
+    .views,
+    .head,
+    .panel {
+      position: relative;
+      inset: auto;
+    }
+    .views {
+      margin: 0 auto;
+      max-width: 1120px;
+      padding: 0 24px;
+    }
+    .head {
+      top: 0;
+      padding: 0 0 12px;
+      justify-content: flex-start;
+    }
+    .panel {
+      height: clamp(520px, 70vh, 640px);
+    }
+    .boxed {
+      width: 100%;
+      margin: 0;
+      align-self: start;
+    }
+  }
+  @media (max-width: 640px) {
+    .panel {
+      height: auto;
     }
   }
 </style>

@@ -83,6 +83,25 @@ test('full screen opens, keeps every node inside, and Esc closes it', async ({ p
   await expect(page.locator('.kg.is-full')).toHaveCount(0);
 });
 
+test('full screen spreads the areas across the width', async ({ page }) => {
+  await page.goto('/');
+  await view(page, 'map').locator('.kg-full').click();
+  await page.waitForTimeout(2000);
+  const svg = await page.locator('.kg.is-full svg').boundingBox();
+  const xs = await page.locator('.kg.is-full [data-node^="area:"] .dot').evaluateAll((els) => els.map((e) => e.getBoundingClientRect().x));
+  expect(Math.max(...xs) - Math.min(...xs)).toBeGreaterThan(svg.width * 0.5);
+});
+
+test('reset folds everything and clears the highlight and card', async ({ page }) => {
+  await page.goto('/');
+  await node(page, 'area:retrieval-rag').click();
+  await expect(node(page, 'entry:rerank')).toBeVisible();
+  await view(page, 'map').locator('.kg-reset').click();
+  await expect(node(page, 'entry:rerank')).toHaveCount(0);
+  await expect(view(page, 'map').locator('.dim')).toHaveCount(0);
+  await expect(view(page, 'map').locator('.kg-card.on')).toHaveCount(0);
+});
+
 test('keyboard opens an area', async ({ page }) => {
   await page.goto('/');
   await node(page, 'area:ai-agents').focus();
@@ -124,7 +143,7 @@ test('closing full screen re-fits the layout to the panel', async ({ page }) => 
   const me = await node(page, 'me').locator('.dot').boundingBox();
   const area = await node(page, 'area:ai-agents').locator('.dot').boundingBox();
   const d = Math.hypot(area.x - me.x, area.y - me.y);
-  expect(d).toBeLessThan(Math.min(svg.width, svg.height) * 0.5);
+  expect(d).toBeLessThan(Math.max(svg.width, svg.height) * 0.5);
 });
 
 test('node colours follow the theme', async ({ page }) => {

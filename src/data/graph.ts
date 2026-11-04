@@ -19,7 +19,7 @@ export const GRAPH: Record<AreaId, GraphEntry[]> = {
   'retrieval-rag': [
     { id: "prodrag", label: "Production RAG architecture", desc: "Architecting production RAG pipelines built to scale: multi-tenant indexes, multi-query and grouped search, and provenance on every result so agents can cite their evidence.", projects: ["air-retrieval-service"] },
     { id: "hybrid", label: "Hybrid search", desc: "Vector, BM25 and hybrid search, with per-collection field schemas and metadata filters.", projects: ["air-retrieval-service"] },
-    { id: "rerank", label: "Re-ranking", desc: "Two-stage re-ranking with a decision model (TypeSafe AI's Jev): it picks the best documents, then the best passages inside them, judging against the user's original question and the documents' metadata. Listwise judging from my EACL 2026 work.", projects: ["air-retrieval-service"] },
+    { id: "rerank", label: "Re-ranking", desc: "Two-stage re-ranking: the best documents first, then the best passages inside them, with listwise judging from my EACL 2026 work.", projects: ["air-retrieval-service"] },
     { id: "parse", label: "Parsing & chunking", desc: "Layout parsing that turns PDFs and documents into structured chunks, with reading-order and neighbouring-chunk retrieval so split answers arrive whole.", projects: ["document-ingestion"] },
     { id: "embed", label: "Embeddings", desc: "Several embedding models, and context-aware embeddings so each passage is read as part of its whole document.", projects: ["air-retrieval-service", "document-ingestion"] },
     { id: "bench", label: "Benchmarking", desc: "Every retrieval change is benchmarked against production on recall, latency and cost before it ships, including generating the evaluation datasets.", projects: ["air-retrieval-service", "document-ingestion"] },
@@ -39,6 +39,7 @@ export const GRAPH: Record<AreaId, GraphEntry[]> = {
   ],
   'agentic-systems': [
     { id: "evalh", label: "Eval harnesses", desc: "Eval harnesses that turn live logs into new test cases, repeat each run, and check against a held-out set so prompt changes do not overfit.", projects: ["voice-agent", "candidate-assessment"] },
+    { id: "jev", label: "Decision models (Jev)", desc: "TypeSafe AI's Jev decision model, used in re-ranking to pick the best documents and then the best passages inside them, judging against the user's original question and the documents' metadata.", projects: ["air-retrieval-service"] },
     { id: "listwise", label: "Listwise ranking", desc: "An active listwise tournament that ranks candidates with far fewer comparisons. Published at EACL 2026.", projects: ["candidate-assessment"] },
     { id: "sql", label: "Text-to-SQL", desc: "Agents that answer questions from structured data through SQL queries.", projects: ["voice-agent", "proofs-of-concept"] },
     { id: "structured", label: "Structured output", desc: "Validated structured output from LLMs, with retries and fallbacks.", projects: ["candidate-assessment", "proofs-of-concept"] },
@@ -60,11 +61,18 @@ export const GRAPH: Record<AreaId, GraphEntry[]> = {
         { id: "kmeans", label: "K-means clustering", projects: ["restaurant-recommender"] },
         { id: "mf", label: "Matrix factorisation", projects: ["restaurant-recommender"] },
       ] },
-    { id: "finetune", label: "Fine-tuning", desc: "Fine-tuning speech recognition models, GANs and transformers.", projects: ["asr-and-model-deployment", "ml-from-scratch", "hypergan-clip", "clipinverter"] },
+    { id: "finetune", label: "Fine-tuning", desc: "Fine-tuning audio models like Whisper, GANs and transformers.", projects: ["asr-and-model-deployment", "ml-from-scratch", "hypergan-clip", "clipinverter"],
+      items: [
+        { id: "ft-audio", label: "Audio models (Whisper)", desc: "Fine-tuning speech recognition models such as Whisper.", projects: ["asr-and-model-deployment"] },
+      ] },
     { id: "courses", label: "Courses", draft: true, items: [] },
-    { id: "cv", label: "Computer vision", desc: "Visual odometry, feature tracking and sensor fusion.", projects: ["visual-inertial-navigation"] },
+    { id: "cv", label: "Computer vision", desc: "CNNs, GANs and vision transformers, plus visual odometry, feature tracking and sensor fusion.", projects: ["visual-inertial-navigation"],
+      items: [
+        { id: "cv-cnn", label: "CNNs", desc: "Convolutional networks for image classification and object detection." },
+        { id: "cv-gans", label: "GANs", desc: "Generative adversarial networks for image synthesis and editing.", projects: ["hypergan-clip", "clipinverter", "blockgan-implementation"] },
+        { id: "cv-vit", label: "ViTs", desc: "Vision transformers for image understanding." },
+      ] },
     { id: "gpu", label: "GPU computing", desc: "Parallel computation in CUDA.", projects: ["gpu-stencil"] },
-    { id: "diffprog", label: "Differentiable programming", desc: "Differentiable sorting and ranking in PyTorch.", projects: ["differentiable-sorting"] },
   ],
   'generative-vision': [
     { id: "gans", label: "GANs & StyleGAN", desc: "Adapting and inverting StyleGAN for editing real photos.", projects: ["hypergan-clip", "clipinverter", "blockgan-implementation"] },
@@ -88,13 +96,13 @@ export const GRAPH: Record<AreaId, GraphEntry[]> = {
 /** Dashed links between entries in different areas. */
 export const RELATED: [string, string][] = [
   ["rerank", "listwise"],
+  ["jev", "rerank"],
   ["bench", "evalh"],
   ["embed", "clip"],
   ["memory", "gmodel"],
   ["support", "sql"],
   ["coding", "cicd"],
   ["hybrid", "graphrag"],
-  ["diffprog", "listwise"],
   ["voice", "serving"],
   ["dlgans", "gans"],
   ["prodrag", "scaling"],

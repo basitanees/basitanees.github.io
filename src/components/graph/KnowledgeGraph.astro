@@ -3,6 +3,11 @@ import { getCollection } from 'astro:content';
 import { AREAS } from '../../data/areas';
 import { buildGraphPayload } from '../../lib/graph-payload';
 
+interface Props {
+  /** Drawn straight on the page background, filling its container, beside the hero text. */
+  bleed?: boolean;
+}
+const { bleed = false } = Astro.props;
 const payload = buildGraphPayload(await getCollection('projects'));
 const json = JSON.stringify(payload).replace(/</g, '\\u003c');
 
@@ -12,7 +17,7 @@ const colours = `:root, :root[data-theme='dark'] { ${vars('dark')} }
 :root[data-theme='light'] { ${vars('light')} }`;
 ---
 <style is:inline set:html={colours}></style>
-<div class="kg" data-kg>
+<div class:list={['kg', { 'kg-bleed': bleed }]} data-kg>
   <ol class="kg-list">
     {
       AREAS.map((a) => (
@@ -32,8 +37,11 @@ const colours = `:root, :root[data-theme='dark'] { ${vars('dark')} }
   <div class="kg-stage">
     <svg role="group" aria-label="Knowledge graph of Abdul Basit's work"></svg>
     <div class="kg-card" aria-live="polite"></div>
-    <button class="kg-full" type="button">Full screen</button>
-    <button class="kg-close" type="button">Close</button>
+    <div class="kg-tools">
+      <button class="kg-full" type="button">Full screen</button>
+      <button class="kg-close" type="button">Close</button>
+      <button class="kg-reset" type="button">Reset</button>
+    </div>
     <p class="kg-hint">
       <span>Click an area to open it, click again to fold it.</span>
       <span class="legend"><span><i></i>belongs to</span><span><i class="x"></i>related</span><span><i class="ring"></i>paper</span></span>
@@ -60,7 +68,7 @@ const colours = `:root, :root[data-theme='dark'] { ${vars('dark')} }
   .kg-list .sub { font-size: 13px; color: var(--text-2); }
   .kg-stage, .kg-open, .kg-close { display: none; }
   .kg.is-live .kg-list { display: none; }
-  .kg.is-live .kg-stage { display: block; position: relative; height: 460px; }
+  .kg.is-live .kg-stage { display: block; position: relative; height: clamp(520px, 68vh, 720px); }
   .kg svg { display: block; width: 100%; height: 100%; }
   .kg .n, .kg.is-full svg { touch-action: none; }
   .kg-bg { fill: transparent; }
@@ -69,9 +77,9 @@ const colours = `:root, :root[data-theme='dark'] { ${vars('dark')} }
   .kg-hint i { display: inline-block; width: 16px; height: 0; border-top: 1px solid var(--line-strong); vertical-align: middle; margin-right: 5px; }
   .kg-hint i.x { border-top: 1px dashed var(--accent); }
   .kg-hint i.ring { width: 8px; height: 8px; border: 1px solid var(--text-2); border-radius: 50%; box-shadow: 0 0 0 2px var(--surface), 0 0 0 3px var(--text-2); }
-  .kg-full, .kg-close, .kg-open { font: inherit; font-size: 12px; color: var(--text-2); background: var(--raised); border: 1px solid var(--line); border-radius: 8px; padding: 5px 10px; cursor: pointer; }
-  .kg-full:hover, .kg-close:hover, .kg-open:hover { color: var(--text); border-color: var(--line-strong); }
-  .kg-full, .kg-close { position: absolute; top: 12px; left: 12px; z-index: 3; }
+  .kg-full, .kg-close, .kg-open, .kg-reset { font: inherit; font-size: 12px; color: var(--text-2); background: color-mix(in srgb, var(--raised) 35%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--line); border-radius: 8px; padding: 5px 10px; cursor: pointer; }
+  .kg-full:hover, .kg-close:hover, .kg-open:hover, .kg-reset:hover { color: var(--text); border-color: var(--line-strong); }
+  .kg-tools { position: absolute; top: 12px; left: 12px; z-index: 3; display: flex; gap: 8px; }
   .kg.is-live .kg-full { display: block; }
   .kg-card { position: absolute; top: 12px; right: 12px; z-index: 3; width: min(300px, calc(100% - 24px)); padding: 14px 16px; border-radius: 12px; font-size: 13px; line-height: 1.45; color: var(--text);
     background: color-mix(in srgb, var(--raised) 86%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid var(--line);
@@ -86,7 +94,7 @@ const colours = `:root, :root[data-theme='dark'] { ${vars('dark')} }
   .kg .n { cursor: pointer; outline: none; }
   .kg .n.me { cursor: default; }
   .kg .n:focus-visible .dot { stroke: var(--accent) !important; stroke-width: 3px !important; }
-  .kg .n text { font-size: 11px; fill: var(--text-2); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; pointer-events: none; transition: opacity 0.3s; }
+  .kg .n text { font-size: 11px; fill: var(--text-2); paint-order: stroke; stroke: var(--kg-halo, var(--surface)); stroke-width: 4px; stroke-linejoin: round; pointer-events: none; transition: opacity 0.3s; }
   .kg .n.area text.lbl { font-size: 12.5px; font-weight: 500; fill: var(--text); }
   .kg .n.me text.lbl { font-size: 13.5px; font-weight: 600; fill: var(--text); }
   .kg .n.project text.lbl { fill: var(--text); }
@@ -106,6 +114,22 @@ const colours = `:root, :root[data-theme='dark'] { ${vars('dark')} }
   .kg.is-full .kg-stage { display: block; height: 100%; }
   .kg.is-full .kg-list, .kg.is-full .kg-open, .kg.is-full .kg-full { display: none; }
   .kg.is-full .kg-close { display: block; }
+  /* Hero mode: no box, fills the hero, sits right of the text with the controls on the right. */
+  .kg.kg-bleed:not(.is-full) { --kg-halo: var(--bg); }
+  .kg.kg-bleed:not(.is-full), .kg.kg-bleed.is-live:not(.is-full) .kg-stage { height: 100%; }
+  /* --kg-top keeps nodes below the controls so they never cover the graph. */
+  .kg.kg-bleed:not(.is-full) { --kg-top: 56px; }
+  .kg.kg-bleed:not(.is-full) .kg-tools { left: auto; right: var(--kg-inset, 24px); top: 12px; }
+  .kg.kg-bleed:not(.is-full) .kg-card { right: var(--kg-inset, 24px); top: 56px; }
+  .kg.kg-bleed:not(.is-full) .kg-hint { left: auto; right: var(--kg-inset, 24px); bottom: 20px; justify-content: flex-end; gap: 24px; }
+  @media (min-width: 961px) {
+    /* The hero text column ends 66px left of the page centre (1120px wrap, 24px padding, 470px text); keep 60px clear. */
+    .kg.kg-bleed { --kg-left-from-center: -6; --kg-inset: max(24px, calc((100% - 1120px) / 2 + 24px)); }
+    /* On wide screens the buttons sit under the hero's Map / Ask / Reel tabs, and the graph starts below them. */
+    .kg.kg-bleed:not(.is-full) { --kg-top: 112px; }
+    .kg.kg-bleed:not(.is-full) .kg-tools { top: 72px; }
+    .kg.kg-bleed:not(.is-full) .kg-card { top: 116px; }
+  }
   @media (max-width: 640px) {
     .kg.is-live:not(.is-full) .kg-stage { display: none; }
     .kg.is-live:not(.is-full) .kg-list { display: block; }

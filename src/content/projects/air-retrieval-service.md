@@ -2,7 +2,7 @@
 title: aiR retrieval service
 section: work
 form: page
-areas: [retrieval-rag, knowledge-graphs, ml-infrastructure]
+areas: [retrieval-rag, knowledge-graphs, agentic-systems, ml-infrastructure]
 org: aiXplain
 role: Research Engineer
 start: '2023-06'

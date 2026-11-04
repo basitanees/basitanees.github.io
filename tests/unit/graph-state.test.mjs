@@ -8,13 +8,12 @@ const p = buildGraphPayload(fixtureProjects());
 const ids = (g) => g.nodes.map((n) => n.id);
 const linkIds = (g, kind) => g.links.filter((l) => l.kind === kind).map((l) => l.id);
 
-test('folded: me, seven areas, seven tree links and nine related links', () => {
+test('folded: me, seven areas, seven tree links and eight related links', () => {
   const g = visibleGraph(p, new Set());
   assert.equal(g.nodes.length, 8);
   assert.equal(linkIds(g, 'tree').length, 7);
   assert.deepEqual(linkIds(g, 'related').sort(), [
     'related:area:agentic-systems|area:ai-agents',
-    'related:area:agentic-systems|area:ml-foundations',
     'related:area:agentic-systems|area:retrieval-rag',
     'related:area:ai-agents|area:knowledge-graphs',
     'related:area:ai-agents|area:ml-infrastructure',

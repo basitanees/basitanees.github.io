@@ -43,12 +43,13 @@ test('deep learning lists its sub-entries in order', () => {
   assert.deepEqual(flattenGraph().find((e) => e.id === 'dl').children, ['dnn', 'cnn', 'rnn', 'transformers', 'dlgans']);
 });
 
-test('the graph renders 46 entries', () => {
-  assert.equal(flattenGraph().length, 46);
+test('the graph renders 50 entries', () => {
+  assert.equal(flattenGraph().length, 50);
 });
 
 test('a project in no entry has no areas', () => {
   assert.deepEqual(projectAreas('radity-backend'), []);
+  assert.deepEqual(projectAreas('differentiable-sorting'), []);
 });
 
 test('graphProblems reports unknown slugs', () => {
