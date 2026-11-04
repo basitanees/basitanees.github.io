@@ -44,3 +44,9 @@ test('the printed CV hides the site header and footer', async ({ page }) => {
   await expect(page.locator('footer')).toBeHidden();
   await expect(page.getByRole('heading', { level: 1, name: 'Abdul Basit Anees' })).toBeVisible();
 });
+
+test('the printed CV is white to the edges, even though the site defaults to dark', async ({ page }) => {
+  await page.emulateMedia({ media: 'print' });
+  await page.goto('/cv/');
+  expect(await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor)).toBe('rgb(255, 255, 255)');
+});

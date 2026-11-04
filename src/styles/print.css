@@ -3,8 +3,12 @@
     size: A4;
     margin: 14mm 14mm 16mm;
   }
+  /* The site defaults to dark; the printed page (margins included) must be white. */
+  html,
   :root,
   :root[data-theme] {
+    color-scheme: light;
+    background: #fff;
     --bg: #fff;
     --text: #111;
     --muted: #444;
