@@ -5,6 +5,7 @@ import Hero from '../components/hero/Hero.astro';
 import ProjectGrid from '../components/ProjectGrid.astro';
 import { SITE } from '../data/site';
 import { sortProjects } from '../lib/projects';
+import Icon from '../components/Icon.astro';
 
 const all = await getCollection('projects');
 const pick = (ids: string[]) => sortProjects(all.filter((p) => ids.includes(p.id)));
@@ -16,12 +17,12 @@ const research = pick(['hypergan-clip', 'clipinverter']);
   <section class="wrap more">
     <div class="row-head">
       <h2 class="section-title">Selected work</h2>
-      <a href="/work/">All work →</a>
+      <a href="/work/">All work <Icon name="arrow-right" size={14} /></a>
     </div>
     <ProjectGrid projects={work} />
     <div class="row-head">
       <h2 class="section-title">Research</h2>
-      <a href="/research/">All research →</a>
+      <a href="/research/">All research <Icon name="arrow-right" size={14} /></a>
     </div>
     <ProjectGrid projects={research} />
   </section>
@@ -29,7 +30,13 @@ const research = pick(['hypergan-clip', 'clipinverter']);
 
 <style>
   .more {
-    margin-top: 40px;
+    margin-top: 64px;
+  }
+  .row-head a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
   }
   .row-head {
     display: flex;

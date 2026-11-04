@@ -42,7 +42,7 @@ test.describe('without JavaScript', () => {
     await page.goto('/');
     expect(await page.locator('html').getAttribute('data-theme')).toBeNull();
     const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
-    expect(bg).toBe('rgb(233, 236, 245)');
+    expect(bg).toBe('rgb(245, 247, 250)');
     await page.locator('label[for="view-ask"]').click();
     await expect(view(page, 'ask')).toBeVisible();
   });

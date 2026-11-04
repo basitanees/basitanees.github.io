@@ -13,45 +13,82 @@ const links = [
   { id: 'contact', label: 'Contact', href: '/contact/' },
 ];
 ---
-<nav class="nav glass" aria-label="Main">
-  {links.map((l) => <a href={l.href} aria-current={l.id === current ? 'page' : undefined}>{l.label}</a>)}
-  <ThemeToggle />
-</nav>
+<header class="bar">
+  <div class="wrap inner">
+    <a class="mark" href="/"><span class="full">Abdul Basit Anees</span><span class="short" aria-hidden="true">ab</span></a>
+    <nav aria-label="Main">
+      {
+        links.map((l) => (
+          <a class:list={[{ 'is-home': l.id === 'home' }]} href={l.href} aria-current={l.id === current ? 'page' : undefined}>
+            {l.label}
+          </a>
+        ))
+      }
+      <ThemeToggle />
+    </nav>
+  </div>
+</header>
 
 <style>
-  .nav {
-    position: fixed;
-    top: 14px;
-    left: 50%;
-    transform: translateX(-50%);
+  .bar {
+    position: sticky;
+    top: 0;
     z-index: 20;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+  .inner {
+    height: 56px;
     display: flex;
     align-items: center;
-    gap: 2px;
-    padding: 5px 6px;
-    border-radius: 999px;
-    font-size: 13px;
-    white-space: nowrap;
+    justify-content: space-between;
+    gap: 16px;
   }
-  a {
+  .mark {
     color: var(--text);
-    padding: 6px 13px;
-    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 500;
   }
-  a:hover {
+  .mark:hover {
     text-decoration: none;
-    background: var(--hov);
   }
-  a[aria-current='page'] {
-    background: var(--seg);
-    font-weight: 600;
+  .short {
+    display: none;
+  }
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  nav a {
+    color: var(--text-2);
+    font-size: 14px;
+    padding: 6px 12px;
+    border-radius: 8px;
+  }
+  nav a:hover {
+    color: var(--text);
+    text-decoration: none;
+    background: var(--raised);
+  }
+  nav a[aria-current='page'] {
+    color: var(--text);
+    background: var(--raised);
   }
   @media (max-width: 640px) {
-    .nav {
-      font-size: 12px;
+    .full,
+    .is-home {
+      display: none;
     }
-    a {
+    .short {
+      display: inline;
+    }
+    nav {
+      gap: 0;
+    }
+    nav a {
       padding: 6px 8px;
+      font-size: 13px;
     }
   }
 </style>

@@ -1,57 +1,54 @@
 ---
 import { AREAS } from '../../data/areas';
 
-// Node positions in percent of the panel, matching the approved mockup.
+// Node positions in percent of the panel.
 const POS: Record<string, { x: number; y: number; up?: boolean }> = {
-  'retrieval-search': { x: 18, y: 26 },
-  'ai-agents': { x: 80, y: 24 },
-  'knowledge-graphs': { x: 84, y: 66, up: true },
+  'retrieval-search': { x: 22, y: 22 },
+  'ai-agents': { x: 78, y: 22 },
+  'knowledge-graphs': { x: 82, y: 64, up: true },
   'generative-models': { x: 58, y: 84, up: true },
-  'llm-systems': { x: 20, y: 74, up: true },
-  'mlops-cloud': { x: 48, y: 15 },
+  'llm-systems': { x: 20, y: 70, up: true },
+  'mlops-cloud': { x: 50, y: 12 },
 };
 const nodes = AREAS.map((a) => ({ ...a, ...POS[a.id] }));
-const cross = [
-  ['retrieval-search', 'llm-systems'],
-  ['ai-agents', 'knowledge-graphs'],
-  ['retrieval-search', 'mlops-cloud'],
-].map(([a, b]) => [POS[a], POS[b]]);
 ---
 <div class="map">
   <div class="graph">
     <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-      {nodes.map((n) => <line x1="50" y1="50" x2={n.x} y2={n.y} vector-effect="non-scaling-stroke" />)}
-      {cross.map(([a, b]) => <line x1={a.x} y1={a.y} x2={b.x} y2={b.y} vector-effect="non-scaling-stroke" />)}
+      {nodes.map((n) => <line data-area={n.id} x1="50" y1="48" x2={n.x} y2={n.y} vector-effect="non-scaling-stroke" />)}
     </svg>
-    <span class="node me" style="left:50%;top:50%" aria-hidden="true">Abdul Basit</span>
+    <span class="node me" style="left:50%;top:48%" aria-hidden="true">Abdul Basit</span>
     {
       nodes.map((n) => (
-        <a class:list={['node glass', { up: n.up }]} href={`/areas/${n.id}/`} style={`left:${n.x}%;top:${n.y}%`}>
+        <a class:list={['node', { up: n.up }]} data-area={n.id} href={`/areas/${n.id}/`} style={`left:${n.x}%;top:${n.y}%`}>
           {n.label}
           <span class="cap">{n.caption}</span>
         </a>
       ))
     }
-    <p class="hint muted">Hover an area to see what's in it. Click to open it.</p>
+    <p class="hint">Hover an area to see what's in it, click to open it</p>
   </div>
-  <ul class="map-list">
+  <ol class="map-list">
     {
-      AREAS.map((a) => (
+      AREAS.map((a, i) => (
         <li>
-          <a class="glass" href={`/areas/${a.id}/`}>
-            <strong>{a.label}</strong>
-            <span>{a.caption}</span>
+          <a href={`/areas/${a.id}/`}>
+            <span class="rank">{String(i + 1).padStart(2, '0')}</span>
+            <span>
+              <strong>{a.label}</strong>
+              <span class="sub">{a.caption}</span>
+            </span>
           </a>
         </li>
       ))
     }
-  </ul>
+  </ol>
 </div>
 
 <style>
   .graph {
     position: relative;
-    height: 320px;
+    height: 400px;
   }
   svg {
     position: absolute;
@@ -60,92 +57,109 @@ const cross = [
     height: 100%;
   }
   line {
-    stroke: var(--line);
-    stroke-width: 1.2;
-    stroke-dasharray: 4 6;
-    animation: flow 3s linear infinite;
+    stroke: var(--line-strong);
+    stroke-width: 1;
+    transition: stroke var(--fast) var(--ease);
   }
-  @keyframes flow {
-    to {
-      stroke-dashoffset: -20;
-    }
+  .graph:has(a[data-area='retrieval-search']:is(:hover, :focus-visible)) line[data-area='retrieval-search'],
+  .graph:has(a[data-area='ai-agents']:is(:hover, :focus-visible)) line[data-area='ai-agents'],
+  .graph:has(a[data-area='knowledge-graphs']:is(:hover, :focus-visible)) line[data-area='knowledge-graphs'],
+  .graph:has(a[data-area='generative-models']:is(:hover, :focus-visible)) line[data-area='generative-models'],
+  .graph:has(a[data-area='llm-systems']:is(:hover, :focus-visible)) line[data-area='llm-systems'],
+  .graph:has(a[data-area='mlops-cloud']:is(:hover, :focus-visible)) line[data-area='mlops-cloud'] {
+    stroke: var(--accent);
   }
   .node {
     position: absolute;
     transform: translate(-50%, -50%);
-    border-radius: 999px;
-    padding: 7px 14px;
-    font-size: 13px;
-    font-weight: 600;
-    white-space: nowrap;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--raised);
     color: var(--text);
-    transition: transform 0.25s, box-shadow 0.25s;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: border-color var(--fast) var(--ease), background-color var(--fast) var(--ease);
   }
   a.node:hover,
   a.node:focus-visible {
     text-decoration: none;
-    transform: translate(-50%, -50%) scale(1.08);
-    box-shadow: 0 0 30px rgba(120, 160, 255, 0.55);
+    border-color: var(--accent);
+    background: var(--surface);
     z-index: 3;
+  }
+  .me {
+    padding: 8px 16px;
+    border-radius: 10px;
+    border-color: transparent;
+    background: var(--button);
+    color: var(--button-text);
+    font-size: 14px;
   }
   .cap {
     position: absolute;
     left: 50%;
-    top: calc(100% + 7px);
+    top: calc(100% + 8px);
     transform: translateX(-50%);
-    font-size: 11.5px;
+    font-size: 12px;
     font-weight: 400;
-    color: var(--cap);
+    color: var(--text-2);
     opacity: 0;
-    transition: opacity 0.2s;
+    transition: opacity var(--fast) var(--ease);
     pointer-events: none;
   }
   .up .cap {
     top: auto;
-    bottom: calc(100% + 7px);
+    bottom: calc(100% + 8px);
   }
   a.node:hover .cap,
   a.node:focus-visible .cap {
     opacity: 1;
   }
-  .me {
-    padding: 9px 17px;
-    font-size: 14px;
-    color: #fff;
-    background: linear-gradient(135deg, rgba(94, 92, 230, 0.75), rgba(175, 82, 222, 0.65));
-    box-shadow: 0 0 30px rgba(140, 100, 255, 0.35);
-  }
   .hint {
     position: absolute;
-    left: 18px;
-    bottom: 4px;
+    left: 20px;
+    bottom: 16px;
     margin: 0;
-    font-size: 11.5px;
+    font-size: 12px;
+    color: var(--muted);
   }
   .map-list {
     display: none;
     list-style: none;
     margin: 0;
-    padding: 16px;
-    gap: 8px;
+    padding: 8px;
   }
   .map-list a {
     display: flex;
-    flex-direction: column;
-    padding: 12px 16px;
-    border-radius: 16px;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 8px;
     color: var(--text);
   }
-  .map-list span {
-    font-size: 12.5px;
-    color: var(--muted);
+  .map-list a:hover {
+    text-decoration: none;
+    background: var(--raised);
+  }
+  .map-list .rank {
+    padding-top: 2px;
+  }
+  .map-list strong {
+    display: block;
+    font-weight: 500;
+    font-size: 15px;
+  }
+  .sub {
+    font-size: 13px;
+    color: var(--text-2);
   }
   @media (max-width: 640px) {
     .graph {
       display: none;
     }
     .map-list {
-      display: grid;
+      display: block;
     }
   }
 </style>

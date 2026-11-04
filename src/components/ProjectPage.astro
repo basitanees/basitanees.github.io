@@ -2,6 +2,7 @@
 import { render, type CollectionEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import AreaChips from './AreaChips.astro';
+import Icon from './Icon.astro';
 import { formatDates } from '../lib/projects';
 
 interface Props {
@@ -10,26 +11,28 @@ interface Props {
 const { entry } = Astro.props;
 const { title, org, role, start, end, summary, areas, links, section } = entry.data;
 const { Content } = await render(entry);
-const meta = [role, formatDates(start, end)].filter(Boolean).join(' · ');
+const meta = [org, role, formatDates(start, end)].filter(Boolean).join(' · ');
 ---
 <Base title={title} description={summary} current={section}>
   <article class="wrap page">
-    <p><a href={`/${section}/`}>← {section === 'work' ? 'Work' : 'Research'}</a></p>
-    {org && <p class="eyebrow">{org}</p>}
+    <a class="back" href={`/${section}/`}>{section === 'work' ? 'Work' : 'Research'}</a>
     <h1>{title}</h1>
-    <p class="meta muted">{meta}</p>
+    <p class="meta">{meta}</p>
     <p class="lead">{summary}</p>
     <AreaChips areas={areas} />
     {
       links.length > 0 && (
         <p class="links">
           {links.map((l) => (
-            <a href={l.href}>{l.label} ↗</a>
+            <a href={l.href}>
+              {l.label}
+              <Icon name="arrow-up-right" size={14} />
+            </a>
           ))}
         </p>
       )
     }
-    <div class="body glass prose">
+    <div class="body surface prose">
       <Content />
     </div>
   </article>
@@ -37,29 +40,52 @@ const meta = [role, formatDates(start, end)].filter(Boolean).join(' · ');
 
 <style>
   .page {
-    max-width: 820px;
+    max-width: 800px;
+  }
+  .back {
+    font-size: 14px;
+    color: var(--text-2);
+  }
+  .back::before {
+    content: '‹ ';
   }
   h1 {
-    font-size: clamp(30px, 5vw, 44px);
-    margin: 6px 0 4px;
+    font-size: clamp(32px, 5vw, 44px);
+    letter-spacing: -0.02em;
+    margin: 16px 0 8px;
   }
   .meta {
-    margin: 0 0 14px;
-    font-size: 14px;
+    margin: 0 0 16px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--muted);
   }
   .lead {
     font-size: 18px;
-    margin: 0 0 16px;
+    line-height: 1.55;
+    color: var(--text-2);
+    margin: 0 0 20px;
   }
   .links {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
-    margin: 16px 0;
+    gap: 8px 20px;
+    margin: 20px 0 0;
+    font-size: 15px;
+  }
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
   }
   .body {
-    margin-top: 20px;
-    border-radius: var(--radius);
-    padding: 8px 26px 18px;
+    margin-top: 32px;
+    border-radius: 16px;
+    padding: 8px 32px 24px;
+  }
+  @media (max-width: 640px) {
+    .body {
+      padding: 4px 20px 20px;
+    }
   }
 </style>

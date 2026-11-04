@@ -1,40 +1,73 @@
 ---
+import { Image } from 'astro:assets';
+import Icon from '../Icon.astro';
+import source from '../../assets/reel-source.webp';
+import blonde from '../../assets/reel-blonde.webp';
+
 const results = [
-  { w: 120, text: 'Noodle Lab, 6 min walk' },
-  { w: 80, text: 'Broth & Bowl, 11 min' },
-  { w: 30, text: 'a sushi place (nice try)' },
+  { name: 'Noodle Lab', meta: '6 min walk' },
+  { name: 'Broth & Bowl', meta: '11 min walk' },
+  { name: 'A sushi place', meta: 'nice try' },
 ];
-const tasks = ['read the repo', 'find the bug', 'write the fix', 'run the tests'];
+const tasks = ['Read the repo', 'Find the bug', 'Write the fix', 'Run the tests'];
 const labels = ['Search', 'Agents', 'Knowledge graphs', 'Generative models'];
 ---
 <div class="reel">
-  <div class="screen glass">
+  <div class="screen">
     <div class="scene s1">
       <p class="lbl">Search</p>
-      <p class="q">› "best ramen within walking distance?"</p>
-      {results.map((r) => <p class="res"><i style={`width:${r.w}px`}></i>{r.text}</p>)}
+      <p class="q">› best ramen within walking distance</p>
+      <ol class="results">
+        {
+          results.map((r, i) => (
+            <li class:list={{ top: i === 0 }}>
+              <span class="rank">{String(i + 1).padStart(2, '0')}</span>
+              <span class="name">{r.name}</span>
+              <span class="meta">{r.meta}</span>
+            </li>
+          ))
+        }
+      </ol>
     </div>
     <div class="scene s2">
       <p class="lbl">Agents</p>
-      {tasks.map((t) => <p class="task"><b aria-hidden="true">✓</b>{t}</p>)}
+      <ul class="tasks">
+        {
+          tasks.map((t) => (
+            <li>
+              <Icon name="check" />
+              {t}
+            </li>
+          ))
+        }
+      </ul>
     </div>
     <div class="scene s3">
       <p class="lbl">Knowledge graphs</p>
       <svg class="kg" viewBox="0 0 400 130" role="img" aria-label="A small graph linking Marie Curie, Pierre Curie, the Nobel Prize, Physics and Chemistry">
         <line x1="70" y1="40" x2="200" y2="65"></line><line x1="200" y1="65" x2="330" y2="35"></line>
         <line x1="200" y1="65" x2="300" y2="110"></line><line x1="70" y1="40" x2="110" y2="110"></line>
-        <circle cx="70" cy="40" r="16"></circle><circle cx="200" cy="65" r="20"></circle><circle cx="330" cy="35" r="16"></circle>
-        <circle cx="300" cy="110" r="14"></circle><circle cx="110" cy="110" r="14"></circle>
-        <text x="48" y="14">Marie Curie</text><text x="183" y="100">Nobel Prize</text><text x="310" y="12">Physics</text>
-        <text x="318" y="128">Chemistry</text><text x="66" y="128">Pierre Curie</text>
+        <circle cx="70" cy="40" r="6"></circle><circle class="hub" cx="200" cy="65" r="8"></circle><circle cx="330" cy="35" r="6"></circle>
+        <circle cx="300" cy="110" r="6"></circle><circle cx="110" cy="110" r="6"></circle>
+        <text x="70" y="24" text-anchor="middle">Marie Curie</text><text x="200" y="90" text-anchor="middle">Nobel Prize</text>
+        <text x="330" y="19" text-anchor="middle">Physics</text><text x="300" y="128" text-anchor="middle">Chemistry</text>
+        <text x="110" y="128" text-anchor="middle">Pierre Curie</text>
       </svg>
     </div>
     <div class="scene s4">
       <p class="lbl">Generative models</p>
-      <p class="faces"><span aria-hidden="true">😐</span><span class="arrow">"make it smile"<br />→</span><span aria-hidden="true">😄</span></p>
+      <div class="edit">
+        <Image src={source} width={96} height={96} densities={[1, 2]} alt="A real portrait before editing" />
+        <span class="prompt">
+          <span class="rank">"blonde hair"</span>
+          <Icon name="arrow-right" />
+        </span>
+        <Image src={blonde} width={96} height={96} densities={[1, 2]} alt="The same portrait after HyperGAN-CLIP edits it from the text blonde hair" />
+      </div>
+      <p class="credit">From HyperGAN-CLIP</p>
     </div>
   </div>
-  <p class="dots" aria-hidden="true">{labels.map((l, i) => <span class={`dot d${i + 1}`}>{l}</span>)}</p>
+  <p class="steps" aria-hidden="true">{labels.map((l, i) => <span class={`step d${i + 1}`}>{l}</span>)}</p>
 </div>
 
 <style>
@@ -42,19 +75,24 @@ const labels = ['Search', 'Agents', 'Knowledge graphs', 'Generative models'];
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 30px 16px 20px;
+    justify-content: center;
+    gap: 16px;
+    height: 100%;
+    padding: 24px;
   }
   .screen {
-    width: min(480px, 100%);
-    min-height: 210px;
-    border-radius: 18px;
+    width: min(440px, 100%);
+    min-height: 232px;
     display: grid;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: var(--bg);
   }
   .scene {
     grid-area: 1 / 1;
-    padding: 18px 22px;
+    padding: 20px 24px;
     opacity: 0;
-    animation: scene 12s ease infinite;
+    animation: scene 12s var(--ease) infinite;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -74,7 +112,7 @@ const labels = ['Search', 'Agents', 'Knowledge graphs', 'Generative models'];
   @keyframes scene {
     0% {
       opacity: 0;
-      transform: translateY(8px);
+      transform: translateY(6px);
     }
     4%,
     22% {
@@ -84,85 +122,108 @@ const labels = ['Search', 'Agents', 'Knowledge graphs', 'Generative models'];
     26%,
     100% {
       opacity: 0;
-      transform: translateY(-8px);
+      transform: none;
     }
   }
   .lbl {
     font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 10px !important;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 12px !important;
   }
   .q {
+    font-family: var(--mono);
     font-size: 13px;
-    padding: 7px 12px;
-    border-radius: 10px;
-    background: var(--qbg);
-    margin-bottom: 9px !important;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: var(--raised);
+    margin-bottom: 8px !important;
   }
-  .res {
-    font-size: 12.5px;
-    margin: 5px 0 !important;
+  .results,
+  .tasks {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .results li {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+  .results .meta {
+    margin-left: auto;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .results .top .name {
+    color: var(--accent);
+  }
+  .tasks li {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    padding: 4px 0;
+    font-size: 14px;
   }
-  .res i {
-    display: inline-block;
-    height: 5px;
-    border-radius: 3px;
-    background: linear-gradient(90deg, #4cc9ff, #8b5cf6);
-  }
-  .task {
-    font-size: 13.5px;
-    margin: 4px 0 !important;
-  }
-  .task b {
-    color: #34c77b;
-    margin-right: 8px;
+  .tasks :global(.icon) {
+    color: var(--positive);
   }
   .kg {
     width: 100%;
-    height: 125px;
+    height: 132px;
   }
   .kg line {
-    stroke: var(--line);
-    stroke-width: 1.4;
+    stroke: var(--line-strong);
+    stroke-width: 1;
   }
   .kg circle {
-    fill: var(--qbg);
+    fill: var(--surface);
+    stroke: var(--muted);
+  }
+  .kg .hub {
     stroke: var(--accent);
   }
   .kg text {
-    fill: var(--cap);
-    font-size: 10px;
+    fill: var(--text-2);
+    font-size: 11px;
     font-family: var(--font);
   }
-  .faces {
+  .edit {
     display: flex;
     align-items: center;
-    gap: 18px;
-    font-size: 52px;
     justify-content: center;
+    gap: 16px;
   }
-  .arrow {
-    font-size: 13px;
+  .edit :global(img) {
+    border-radius: 8px;
+    display: block;
+  }
+  .prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
     color: var(--muted);
-    text-align: center;
   }
-  .dots {
+  .credit {
+    margin-top: 12px !important;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .steps {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 6px 18px;
-    margin: 14px 0 0;
-    font-size: 11.5px;
+    gap: 4px 16px;
+    margin: 0;
+    font-size: 12px;
   }
-  .dot {
-    color: var(--dotoff);
-    animation: dot 12s ease infinite;
+  .step {
+    color: var(--muted);
+    animation: step 12s var(--ease) infinite;
   }
   .d2 {
     animation-delay: 3s;
@@ -173,27 +234,33 @@ const labels = ['Search', 'Agents', 'Knowledge graphs', 'Generative models'];
   .d4 {
     animation-delay: 9s;
   }
-  @keyframes dot {
+  @keyframes step {
     0%,
     24% {
       color: var(--text);
     }
     26%,
     100% {
-      color: var(--dotoff);
+      color: var(--muted);
     }
   }
   @media (prefers-reduced-motion: reduce) {
     .screen {
       width: 100%;
       grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
-      gap: 4px;
+      background: none;
+      border: 0;
+      gap: 8px;
     }
     .scene {
       grid-area: auto;
       opacity: 1;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--bg);
     }
-    .dots {
+    .steps {
       display: none;
     }
   }

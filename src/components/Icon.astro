@@ -1,0 +1,24 @@
+---
+// A few lucide icons (ISC licence), drawn inline at one stroke weight.
+const PATHS = {
+  sun: ['M12 2v2', 'M12 20v2', 'm4.93 4.93 1.41 1.41', 'm17.66 17.66 1.41 1.41', 'M2 12h2', 'M20 12h2', 'm6.34 17.66-1.41 1.41', 'm19.07 4.93-1.41 1.41'],
+  moon: ['M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z'],
+  search: ['m21 21-4.3-4.3'],
+  'arrow-up-right': ['M7 7h10v10', 'M7 17 17 7'],
+  'arrow-right': ['M5 12h14', 'm12 5 7 7-7 7'],
+  check: ['M20 6 9 17l-5-5'],
+  download: ['M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4', 'm7 10 5 5 5-5', 'M12 15V3'],
+} as const;
+const CIRCLES: Partial<Record<keyof typeof PATHS, [number, number, number]>> = { sun: [12, 12, 4], search: [11, 11, 8] };
+
+interface Props {
+  name: keyof typeof PATHS;
+  size?: number;
+}
+const { name, size = 16 } = Astro.props;
+const circle = CIRCLES[name];
+---
+<svg class="icon" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  {circle && <circle cx={circle[0]} cy={circle[1]} r={circle[2]} />}
+  {PATHS[name].map((d) => <path d={d} />)}
+</svg>

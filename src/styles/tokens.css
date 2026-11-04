@@ -1,78 +1,69 @@
+/* Ink ramp: cool, technical neutrals with one cobalt accent. */
 :root,
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --bg: #07080f;
-  --text: #e9ebff;
-  --muted: #9aa0c8;
-  --glass: rgba(28, 34, 82, 0.34);
-  --glass-solid: #161b3d;
-  --gb: rgba(140, 150, 255, 0.24);
-  --shadow: 0 0 40px rgba(110, 90, 255, 0.16);
-  --accent: #8f9bff;
-  --line: rgba(127, 150, 255, 0.45);
-  --hov: rgba(127, 140, 255, 0.3);
-  --qbg: rgba(127, 140, 255, 0.12);
-  --cap: #c9ceff;
-  --dotoff: #5c628f;
-  --seg: rgba(255, 255, 255, 0.16);
-  --b1: #3420d6;
-  --b2: #0b78b5;
-  --b3: #8a22d0;
-  --bo: 0.5;
-  --grid: 1;
+  --bg: #0b0d14;
+  --surface: #11141c;
+  --raised: #1a1e28;
+  --text: #eef0f5;
+  --text-2: #a3a9b8;
+  --muted: #7a8296;
+  --line: rgba(238, 240, 245, 0.08);
+  --line-strong: rgba(238, 240, 245, 0.16);
+  --accent: #7ea2ff;
+  --positive: #4cc38a;
+  --button: #eef0f5;
+  --button-text: #0b0d14;
+  --shadow: none;
+  --shadow-float: none;
+  --highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 :root[data-theme='light'] {
   color-scheme: light;
-  --bg: #e9ecf5;
-  --text: #1d1d1f;
-  --muted: #55555a;
-  --glass: rgba(255, 255, 255, 0.42);
-  --glass-solid: #f6f7fb;
-  --gb: rgba(255, 255, 255, 0.85);
-  --shadow: 0 8px 32px rgba(31, 38, 135, 0.12);
-  --accent: #5e5ce6;
-  --line: rgba(94, 92, 230, 0.4);
-  --hov: rgba(255, 255, 255, 0.9);
-  --qbg: rgba(255, 255, 255, 0.6);
-  --cap: #3a3a3c;
-  --dotoff: #a1a1a6;
-  --seg: rgba(255, 255, 255, 0.95);
-  --b1: #7aa8ff;
-  --b2: #ff9ad5;
-  --b3: #7ef0d0;
-  --bo: 0.85;
-  --grid: 0;
+  --bg: #f5f7fa;
+  --surface: #ffffff;
+  --raised: #eceff4;
+  --text: #111827;
+  --text-2: #4b5565;
+  --muted: #6b7487;
+  --line: rgba(17, 24, 39, 0.08);
+  --line-strong: rgba(17, 24, 39, 0.16);
+  --accent: #2557d6;
+  --positive: #16a34a;
+  --button: #111827;
+  --button-text: #ffffff;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-float: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --highlight: none;
 }
 
 /* Without JavaScript there is no data-theme, so follow the device. */
 @media (prefers-color-scheme: light) {
   :root:not([data-theme]) {
     color-scheme: light;
-    --bg: #e9ecf5;
-    --text: #1d1d1f;
-    --muted: #55555a;
-    --glass: rgba(255, 255, 255, 0.42);
-    --glass-solid: #f6f7fb;
-    --gb: rgba(255, 255, 255, 0.85);
-    --shadow: 0 8px 32px rgba(31, 38, 135, 0.12);
-    --accent: #5e5ce6;
-    --line: rgba(94, 92, 230, 0.4);
-    --hov: rgba(255, 255, 255, 0.9);
-    --qbg: rgba(255, 255, 255, 0.6);
-    --cap: #3a3a3c;
-    --dotoff: #a1a1a6;
-    --seg: rgba(255, 255, 255, 0.95);
-    --b1: #7aa8ff;
-    --b2: #ff9ad5;
-    --b3: #7ef0d0;
-    --bo: 0.85;
-    --grid: 0;
+    --bg: #f5f7fa;
+    --surface: #ffffff;
+    --raised: #eceff4;
+    --text: #111827;
+    --text-2: #4b5565;
+    --muted: #6b7487;
+    --line: rgba(17, 24, 39, 0.08);
+    --line-strong: rgba(17, 24, 39, 0.16);
+    --accent: #2557d6;
+    --positive: #16a34a;
+    --button: #111827;
+    --button-text: #ffffff;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-float: 0 8px 24px rgba(0, 0, 0, 0.06);
+    --highlight: none;
   }
 }
 
 :root {
-  --font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Inter, system-ui, sans-serif;
-  --mono: 'SF Mono', ui-monospace, Menlo, Consolas, monospace;
-  --radius: 24px;
+  --font: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --mono: 'Geist Mono', 'SF Mono', ui-monospace, Menlo, Consolas, monospace;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --fast: 150ms;
+  --enter: 400ms;
 }

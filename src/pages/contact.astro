@@ -21,7 +21,7 @@ const links = [
       {
         links.map((l) => (
           <li>
-            <a class="glass" href={l.href}>
+            <a class="surface" href={l.href}>
               <strong>{l.label}</strong>
               <span class="muted">{l.text}</span>
             </a>
@@ -46,12 +46,12 @@ const links = [
     display: flex;
     flex-direction: column;
     gap: 2px;
-    padding: 18px 22px;
-    border-radius: var(--radius);
+    padding: 20px 24px;
+    border-radius: 16px;
     color: var(--text);
   }
   .links a:hover {
     text-decoration: none;
-    background: var(--hov);
+    border-color: var(--line-strong);
   }
 </style>

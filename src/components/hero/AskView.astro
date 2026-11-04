@@ -1,18 +1,26 @@
 ---
 import { ASK } from '../../data/ask';
+import Icon from '../Icon.astro';
 ---
 <div class="ask">
-  <div class="bar glass" aria-hidden="true"><span>⌕</span><span class="ph">Ask about my work</span></div>
+  <div class="field" aria-hidden="true"><Icon name="search" /><span>Ask about my work</span></div>
   <fieldset class="qa">
     <legend class="sr-only">Pick a question</legend>
     {
       ASK.map((item, i) => (
         <>
           <input class="sr-only" type="radio" name="ask" id={`ask-${i + 1}`} checked={i === 0} />
-          <label class="chip glass" for={`ask-${i + 1}`}>{item.question}</label>
-          <div class="answer glass" aria-live="polite">
-            <p>{item.answer}</p>
-            <a href={item.href}>{item.linkLabel} →</a>
+          <label class="chip" for={`ask-${i + 1}`}>
+            {item.question}
+          </label>
+          <div class="answer" aria-live="polite">
+            <span class="rank">01</span>
+            <div>
+              <p>{item.answer}</p>
+              <a href={item.href}>
+                {item.linkLabel} <Icon name="arrow-right" size={14} />
+              </a>
+            </div>
           </div>
         </>
       ))
@@ -22,53 +30,46 @@ import { ASK } from '../../data/ask';
 
 <style>
   .ask {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 26px 20px;
+    padding: 24px;
   }
-  .bar {
-    width: min(540px, 100%);
-    border-radius: 14px;
-    padding: 12px 16px;
-    font-size: 16px;
+  .field {
     display: flex;
+    align-items: center;
     gap: 10px;
-    align-items: center;
-  }
-  .ph {
+    height: 44px;
+    padding: 0 16px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--raised);
     color: var(--muted);
-    border-right: 2px solid var(--accent);
-    padding-right: 3px;
-    animation: blink 0.9s step-end infinite;
-  }
-  @keyframes blink {
-    50% {
-      border-color: transparent;
-    }
+    font-size: 15px;
   }
   .qa {
     border: 0;
-    margin: 14px 0 0;
+    margin: 16px 0 0;
     padding: 0;
-    width: min(640px, 100%);
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     gap: 8px;
   }
   .chip {
     font-size: 13px;
-    padding: 7px 13px;
-    border-radius: 999px;
+    line-height: 20px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    color: var(--text-2);
     cursor: pointer;
+    transition: color var(--fast) var(--ease), border-color var(--fast) var(--ease), background-color var(--fast) var(--ease);
   }
   .chip:hover {
-    background: var(--hov);
+    color: var(--text);
+    border-color: var(--line-strong);
   }
   input:checked + .chip {
-    background: var(--seg);
-    font-weight: 600;
+    color: var(--text);
+    border-color: var(--line-strong);
+    background: var(--raised);
   }
   input:focus-visible + .chip {
     outline: 2px solid var(--accent);
@@ -78,15 +79,26 @@ import { ASK } from '../../data/ask';
     display: none;
     order: 1;
     flex-basis: 100%;
-    margin-top: 6px;
-    border-radius: 14px;
-    padding: 14px 18px;
-    font-size: 14.5px;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+  }
+  .answer .rank {
+    padding-top: 3px;
   }
   .answer p {
-    margin: 0 0 6px;
+    margin: 0 0 8px;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .answer a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
   }
   input:checked + .chip + .answer {
-    display: block;
+    display: flex;
   }
 </style>

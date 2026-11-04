@@ -4,6 +4,7 @@ import { CV } from '../data/cv';
 import { PUBLICATIONS } from '../data/publications';
 import { SITE } from '../data/site';
 import { formatDates } from '../lib/projects';
+import Icon from '../components/Icon.astro';
 import '../styles/print.css';
 ---
 <Base title="CV" description="CV of Abdul Basit Anees, Research Engineer at aiXplain: retrieval, agents, knowledge graphs and generative-models research." current="cv">
@@ -16,15 +17,15 @@ import '../styles/print.css';
         {CV.location} · <a href={`mailto:${SITE.email}`}>{SITE.email}</a> · <a href={SITE.linkedin}>LinkedIn</a> · <a href={SITE.github}>GitHub</a> ·
         <a href={SITE.scholar}>Google Scholar</a>
       </p>
-      <a class="download glass no-print" href={SITE.pdfPath} download>Download PDF</a>
+      <a class="button button-secondary no-print" href={SITE.pdfPath} download>Download PDF <Icon name="download" /></a>
     </header>
 
-    <section class="block glass">
+    <section class="block surface">
       <h2>Summary</h2>
       <p>{CV.summary}</p>
     </section>
 
-    <section class="block glass">
+    <section class="block surface">
       <h2>Experience</h2>
       {
         CV.experience.map((r) => (
@@ -45,7 +46,7 @@ import '../styles/print.css';
       }
     </section>
 
-    <section class="block glass">
+    <section class="block surface">
       <h2>Publications</h2>
       {
         PUBLICATIONS.map((p) => (
@@ -59,7 +60,7 @@ import '../styles/print.css';
       }
     </section>
 
-    <section class="block glass">
+    <section class="block surface">
       <h2>Projects</h2>
       {
         CV.projects.map((p) => (
@@ -72,7 +73,7 @@ import '../styles/print.css';
       }
     </section>
 
-    <section class="block glass">
+    <section class="block surface">
       <h2>Education</h2>
       {
         CV.education.map((e) => (
@@ -87,7 +88,7 @@ import '../styles/print.css';
       }
     </section>
 
-    <section class="block glass">
+    <section class="block surface">
       <h2>Skills</h2>
       <dl class="skills">
         {
@@ -101,7 +102,7 @@ import '../styles/print.css';
       </dl>
     </section>
 
-    <section class="block glass">
+    <section class="block surface">
       <h2>Languages</h2>
       <p>{CV.languages.join(' · ')}</p>
       <h2>Achievements</h2>
@@ -131,20 +132,9 @@ import '../styles/print.css';
     margin: 0 0 16px;
     font-size: 14px;
   }
-  .download {
-    display: inline-block;
-    padding: 9px 18px;
-    border-radius: 999px;
-    color: var(--text);
-    font-weight: 600;
-  }
-  .download:hover {
-    text-decoration: none;
-    background: var(--hov);
-  }
   .block {
-    border-radius: var(--radius);
-    padding: 6px 24px 14px;
+    border-radius: 16px;
+    padding: 8px 24px 16px;
     margin-bottom: 16px;
   }
   h2 {

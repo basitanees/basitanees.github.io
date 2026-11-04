@@ -1,64 +1,91 @@
 ---
 import AreaChips from './AreaChips.astro';
+import Icon from './Icon.astro';
 import { formatDates, projectHref, type P } from '../lib/projects';
 
 interface Props {
   project: P;
+  rank?: number;
 }
-const { project } = Astro.props;
+const { project, rank } = Astro.props;
 const { title, org, start, end, summary, areas, links } = project.data;
 const href = projectHref(project);
 const meta = [org, formatDates(start, end)].filter(Boolean).join(' · ');
 ---
-<article class="card glass" data-project={project.id}>
-  <p class="meta">{meta}</p>
+<article class="card surface" data-project={project.id}>
+  <p class="top">
+    {rank !== undefined && <span class="rank">{String(rank).padStart(2, '0')}</span>}
+    <span class="meta">{meta}</span>
+  </p>
   <h3>{href ? <a href={href}>{title}</a> : title}</h3>
   <p class="summary">{summary}</p>
-  <AreaChips areas={areas} small />
-  {
-    links.length > 0 && (
-      <p class="links">
-        {links.map((l) => (
-          <a href={l.href}>{l.label} ↗</a>
-        ))}
-      </p>
-    )
-  }
+  <div class="foot">
+    <AreaChips areas={areas} small />
+    {
+      links.length > 0 && (
+        <p class="links">
+          {links.map((l) => (
+            <a href={l.href}>
+              {l.label}
+              <Icon name="arrow-up-right" size={14} />
+            </a>
+          ))}
+        </p>
+      )
+    }
+  </div>
 </article>
 
 <style>
   .card {
-    border-radius: var(--radius);
-    padding: 20px 22px;
+    border-radius: 16px;
+    padding: 24px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
+    transition: border-color var(--fast) var(--ease);
   }
-  .meta {
+  .card:has(h3 a:hover) {
+    border-color: var(--line-strong);
+  }
+  .top {
     margin: 0;
-    font-size: 12px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    font-size: 13px;
     color: var(--muted);
   }
   h3 {
-    margin: 0;
-    font-size: 19px;
+    margin: 4px 0 0;
+    font-size: 18px;
   }
   h3 a {
     color: var(--text);
   }
-  h3 a::after {
-    content: ' →';
-    color: var(--accent);
-  }
   .summary {
     margin: 0;
-    font-size: 14.5px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+  .foot {
+    margin-top: auto;
+    padding-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
   .links {
     margin: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: 14px;
-    font-size: 13px;
+    gap: 8px 16px;
+    font-size: 14px;
+  }
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
   }
 </style>

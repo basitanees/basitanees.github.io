@@ -7,6 +7,7 @@ import { AREA_IDS } from '../../data/areas';
 import { PUBLICATIONS } from '../../data/publications';
 import { SITE } from '../../data/site';
 import { inSection, sortProjects } from '../../lib/projects';
+import Icon from '../../components/Icon.astro';
 
 const projects = sortProjects(inSection(await getCollection('projects'), 'research'));
 const areas = AREA_IDS.filter((a) => projects.some((p) => p.data.areas.includes(a)));
@@ -23,9 +24,9 @@ const areas = AREA_IDS.filter((a) => projects.some((p) => p.data.areas.includes(
     <h2 class="section-title">Publications</h2>
     <ol class="pubs">
       {
-        PUBLICATIONS.map((p) => (
-          <li class="pub glass">
-            <p class="venue eyebrow">{p.venue}</p>
+        PUBLICATIONS.map((p, i) => (
+          <li class="pub surface">
+            <p class="venue"><span class="rank">{String(i + 1).padStart(2, '0')}</span><span>{p.venue}</span></p>
             <h3>
               <a href={p.project}>{p.title}</a>
             </h3>
@@ -39,7 +40,10 @@ const areas = AREA_IDS.filter((a) => projects.some((p) => p.data.areas.includes(
             </p>
             <p class="links">
               {p.links.map((l) => (
-                <a href={l.href}>{l.label} ↗</a>
+                <a href={l.href}>
+                  {l.label}
+                  <Icon name="arrow-up-right" size={14} />
+                </a>
               ))}
             </p>
           </li>
@@ -58,32 +62,45 @@ const areas = AREA_IDS.filter((a) => projects.some((p) => p.data.areas.includes(
     margin: 0;
     padding: 0;
     display: grid;
-    gap: 14px;
+    gap: 16px;
   }
   .pub {
-    border-radius: var(--radius);
-    padding: 18px 22px;
+    border-radius: 16px;
+    padding: 20px 24px;
+  }
+  .venue {
+    margin: 0;
+    display: flex;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
   }
   .pub h3 {
-    margin: 4px 0 6px;
+    margin: 8px 0;
     font-size: 18px;
   }
   .pub h3 a {
     color: var(--text);
   }
   .authors {
-    margin: 0 0 8px;
+    margin: 0 0 12px;
     font-size: 14px;
-    color: var(--muted);
+    color: var(--text-2);
   }
   .authors strong {
     color: var(--text);
+    font-weight: 500;
   }
   .links {
     margin: 0;
     display: flex;
-    gap: 14px;
+    gap: 8px 16px;
     flex-wrap: wrap;
-    font-size: 13px;
+    font-size: 14px;
   }
 </style>

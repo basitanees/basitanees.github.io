@@ -1,16 +1,18 @@
+---
+import Icon from './Icon.astro';
+---
 <button class="toggle" type="button" data-theme-toggle hidden>
-  <span class="icon" aria-hidden="true"></span>
+  <span class="sun"><Icon name="sun" /></span>
+  <span class="moon"><Icon name="moon" /></span>
 </button>
 
 <script>
   const root = document.documentElement;
   const button = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
   if (button) {
-    const icon = button.querySelector('.icon');
     const sync = () => {
       const dark = root.dataset.theme !== 'light';
       button.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
-      if (icon) icon.textContent = dark ? '☀' : '☾';
     };
     button.addEventListener('click', () => {
       root.dataset.theme = root.dataset.theme === 'light' ? 'dark' : 'light';
@@ -29,16 +31,29 @@
 <style>
   .toggle {
     margin-left: 4px;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    border: 1px solid var(--gb);
-    background: var(--seg);
-    color: var(--text);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--text-2);
     cursor: pointer;
-    font-size: 14px;
-    line-height: 1;
     display: inline-grid;
     place-items: center;
+    transition: color var(--fast) var(--ease), background-color var(--fast) var(--ease);
+  }
+  .toggle[hidden] {
+    display: none;
+  }
+  .toggle:hover {
+    color: var(--text);
+    background: var(--raised);
+  }
+  .toggle span {
+    display: grid;
+  }
+  :global(:root[data-theme='dark']) .moon,
+  :global(:root[data-theme='light']) .sun {
+    display: none;
   }
 </style>

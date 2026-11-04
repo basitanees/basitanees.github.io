@@ -1,30 +1,44 @@
 ---
 import { SITE } from '../data/site';
 ---
-<footer class="wrap">
-  <p>
-    <a href={`mailto:${SITE.email}`}>Email</a>
-    <a href={SITE.linkedin}>LinkedIn</a>
-    <a href={SITE.github}>GitHub</a>
-    <a href={SITE.scholar}>Google Scholar</a>
-  </p>
-  <p class="muted">© {new Date().getFullYear()} {SITE.name}</p>
+<footer>
+  <div class="wrap inner">
+    <p class="muted">© {new Date().getFullYear()} {SITE.name}</p>
+    <p class="links">
+      <a href={`mailto:${SITE.email}`}>Email</a>
+      <a href={SITE.linkedin}>LinkedIn</a>
+      <a href={SITE.github}>GitHub</a>
+      <a href={SITE.scholar}>Google Scholar</a>
+    </p>
+  </div>
 </footer>
 
 <style>
   footer {
-    position: relative;
-    z-index: 1;
-    padding-top: 48px;
-    padding-bottom: 40px;
-    font-size: 13px;
-    text-align: center;
+    margin-top: 96px;
+    border-top: 1px solid var(--line);
+  }
+  .inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px 24px;
+    padding-top: 24px;
+    padding-bottom: 32px;
+    font-size: 14px;
   }
   p {
-    margin: 6px 0;
+    margin: 0;
+  }
+  .links {
     display: flex;
-    gap: 18px;
-    justify-content: center;
     flex-wrap: wrap;
+    gap: 20px;
+  }
+  .links a {
+    color: var(--text-2);
+  }
+  .links a:hover {
+    color: var(--text);
   }
 </style>

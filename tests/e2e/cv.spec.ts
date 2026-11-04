@@ -36,3 +36,11 @@ test('in print, a long role can split across pages but a bullet cannot', async (
   expect(role).toBe('auto');
   expect(bullet).toBe('avoid');
 });
+
+test('the printed CV hides the site header and footer', async ({ page }) => {
+  await page.emulateMedia({ media: 'print' });
+  await page.goto('/cv/');
+  await expect(page.getByRole('navigation', { name: 'Main' })).toBeHidden();
+  await expect(page.locator('footer')).toBeHidden();
+  await expect(page.getByRole('heading', { level: 1, name: 'Abdul Basit Anees' })).toBeVisible();
+});

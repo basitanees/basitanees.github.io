@@ -17,7 +17,7 @@
     line-height: 1.4;
   }
   .bg,
-  .nav,
+  body > header,
   footer,
   .skip,
   .no-print {
@@ -27,7 +27,8 @@
     padding-top: 0;
     min-height: 0;
   }
-  .glass {
+  .surface,
+  .button {
     background: none !important;
     border: 0 !important;
     box-shadow: none !important;
