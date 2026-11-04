@@ -21,6 +21,13 @@ export const ASK = [
     linkLabel: 'Open research',
   },
   {
+    id: 'fundamentals',
+    question: 'How well do you know the fundamentals?',
+    answer: 'From 2018 to 2023 I wrote models from scratch: linear and logistic regression, KNN, SVM, RNNs, transformers and GANs, then again in PyTorch and TensorFlow. Since 2023 I have worked mostly on LLMs, agents and retrieval.',
+    href: '/research/',
+    linkLabel: 'Open research',
+  },
+  {
     id: 'stack',
     question: "What's your stack?",
     answer: 'Python and PyTorch. Qdrant and Neo4j. FastAPI. Docker and Kubernetes on AWS, with Datadog for tracing.',

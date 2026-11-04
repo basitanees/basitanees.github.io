@@ -7,7 +7,7 @@ test('work lists every work entry', async ({ page }) => {
 
 test('research lists every research entry plus the EACL work', async ({ page }) => {
   await page.goto('/research/');
-  await expect(page.locator('[data-project]')).toHaveCount(9);
+  await expect(page.locator('[data-project]')).toHaveCount(10);
   await expect(page.locator('[data-project="candidate-assessment"]')).toBeVisible();
 });
 
@@ -66,4 +66,23 @@ test('the HR manager page covers the interviews and their analysis', async ({ pa
   await expect(main).toContainText('AI avatar');
   await expect(main).toContainText('emotion analysis');
   await expect(main).toContainText('transcript analysis');
+});
+
+test('research shows the from-scratch ML foundations', async ({ page }) => {
+  await page.goto('/research/');
+  await expect(page.locator('[data-project="ml-from-scratch"]')).toContainText('from scratch');
+});
+
+test('the CV lists ML foundations', async ({ page }) => {
+  await page.goto('/cv/');
+  await expect(page.getByText('ML foundations')).toBeVisible();
+  await expect(page.getByRole('main')).toContainText('writing neural networks from scratch');
+});
+
+test('Ask covers the fundamentals', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('label[for="view-ask"]').click();
+  const ask = page.locator('[data-view="ask"]');
+  await ask.getByText('How well do you know the fundamentals?').click();
+  await expect(ask).toContainText('SVM');
 });

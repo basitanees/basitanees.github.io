@@ -10,7 +10,7 @@ export interface Role {
 export const CV = {
   location: 'Islamabad, Pakistan',
   summary:
-    "Applied AI engineer (MSc, Koç University) with 6+ years across research and industry, building production retrieval, LLM and knowledge-graph systems (Qdrant, Neo4j, Cypher). I own aiR, the retrieval service behind every aiXplain agent's knowledge base, designed its V3 rebuild for scale and accuracy, and developed Koder, aiXplain's coding agent. I pair careful offline evaluation on recall, latency and cost with production engineering on Kubernetes, CI/CD and Datadog, and I write the RFCs and decision briefs that get designs adopted. Published at SIGGRAPH Asia, in ACM Transactions on Graphics and at EACL.",
+    "Applied AI engineer (MSc, Koç University) with 6+ years across research and industry, building production retrieval, LLM and knowledge-graph systems (Qdrant, Neo4j, Cypher). I own aiR, the retrieval service behind every aiXplain agent's knowledge base, designed its V3 rebuild for scale and accuracy, and developed Koder, aiXplain's coding agent. I pair careful offline evaluation on recall, latency and cost with production engineering on Kubernetes, CI/CD and Datadog, and I write the RFCs and decision briefs that get designs adopted. Published at SIGGRAPH Asia, in ACM Transactions on Graphics and at EACL. I spent 2018 to 2023 writing neural networks from scratch before moving to PyTorch and TensorFlow, and since 2023 I've worked mostly on LLMs, agentic systems and information retrieval.",
   experience: [
     {
       org: 'aiXplain',
@@ -153,6 +153,7 @@ export const CV = {
     },
   ],
   skills: [
+    { group: 'ML foundations', items: 'linear & logistic regression, KNN, SVM, single-layer and deep networks, RNNs, transformers and GANs, each coded from scratch and in PyTorch/TensorFlow; extensive fine-tuning of GANs and transformers' },
     { group: 'Information retrieval & NLP', items: 'vector, hybrid & BM25 search; embeddings & contextual embeddings; LLM and decision-model re-ranking; document parsing & chunking; retrieval evaluation (recall@k, hit-rate@k, MRR); RAG, GraphRAG' },
     { group: 'Agent frameworks', items: 'aiXplain, LangGraph, LangChain, CrewAI' },
     { group: 'Programming & ML', items: 'Python, SQL, C++, C, Julia, MATLAB, Java, JavaScript/Node.js; PyTorch, TensorFlow, Keras, scikit-learn, pandas, NumPy; OpenCV, CUDA, OpenMP' },
