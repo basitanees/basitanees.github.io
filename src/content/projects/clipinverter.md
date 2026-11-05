@@ -12,7 +12,7 @@ links:
   - { label: DOI, href: 'https://doi.org/10.1145/3610287' }
   - { label: Project page, href: 'https://cyberiada.github.io/CLIPInverter/' }
   - { label: Demo, href: 'https://huggingface.co/spaces/johnberg/CLIPInverter' }
-  - { label: "Code (first author's repo)", href: 'https://github.com/johnberg1/CLIPInverter' }
+  - { label: 'Code', href: 'https://github.com/johnberg1/CLIPInverter' }
 order: 20
 ---
 
@@ -43,4 +43,4 @@ The project page compares it with StyleCLIP-LM and HairCLIP, and reports more ac
 
 ## Credit
 
-The official code lives in the first author's repository, linked above.
+The official code is linked above.
