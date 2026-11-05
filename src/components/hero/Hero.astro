@@ -129,6 +129,13 @@ const VIEWS = [
     gap: 12px;
     margin: 0;
   }
+  /* Full screen graph: lift its layer above the text and the nav, and hide the tabs. */
+  .views:has(.kg.is-full) {
+    z-index: 100;
+  }
+  .views:has(.kg.is-full) .head {
+    visibility: hidden;
+  }
   .head {
     position: absolute;
     top: 20px;

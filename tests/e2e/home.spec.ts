@@ -83,6 +83,22 @@ test('full screen opens, keeps every node inside, and Esc closes it', async ({ p
   await expect(page.locator('.kg.is-full')).toHaveCount(0);
 });
 
+test('full screen shows only the graph, above the hero text, tabs and nav', async ({ page }) => {
+  await page.goto('/');
+  await view(page, 'map').locator('.kg-full').click();
+  const full = page.locator('.kg.is-full');
+  await expect(full).toBeVisible();
+  const covered = await full.evaluate((kg) => {
+    const r = kg.getBoundingClientRect();
+    const pts = [];
+    for (let i = 1; i < 10; i++) for (let j = 1; j < 10; j++) pts.push([r.left + (r.width * i) / 10, r.top + (r.height * j) / 10]);
+    pts.push([r.left + 30, r.top + 20]);
+    return pts.filter(([x, y]) => !kg.contains(document.elementFromPoint(x, y))).length;
+  });
+  expect(covered).toBe(0);
+  await expect(page.locator('.hero .seg')).toBeHidden();
+});
+
 test('full screen spreads the areas across the width', async ({ page }) => {
   await page.goto('/');
   await view(page, 'map').locator('.kg-full').click();
